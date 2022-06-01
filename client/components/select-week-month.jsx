@@ -2,6 +2,23 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 
+function SelectDropDown(props) {
+  const { onChange } = props;
+  return (
+    <div className='w-full text-center mt-8 mb-5'>
+      <select onChange={onChange}
+
+        className='select select-ghost w-3/4 p-1 font-nunito-sans font-light text-xl active:outline-none
+      focus:outline-none focus:border-b focus:border-b-blue-500
+              lg:w-68'>
+
+        <option value={'week'}>Choose days of the week</option>
+        <option value={'month'}>Choose days of the month</option>
+      </select>
+    </div>
+  )
+}
+
 function CreateWeek(props) {
   const {mousedown, mouseup, selecting, selectdays} = props;
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -21,11 +38,15 @@ function CreateWeek(props) {
   return week;
 }
 
+function CreateCalendar(props) {
+
+}
+
 class SelectWeekMonth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      week: true,
+      view: 'week',
       daysSelected: [],
       toggle: false,
       selecting: false
@@ -92,17 +113,8 @@ class SelectWeekMonth extends React.Component {
     return (
       <div className='w-full mx-5 min-h-fit
                       lg:w-116 lg:mt-10 lg:order-4 lg:mx-0'>
-          <div className='w-full text-center mt-8 mb-5'>
-            <select onChange={handleSelectChange}
 
-              className='select select-ghost w-3/4 p-1 font-nunito-sans font-light text-xl active:outline-none
-      focus:outline-none focus:border-b focus:border-b-blue-500
-              lg:w-64'>
-
-              <option value={'week'}>Choose days of the week</option>
-              <option value={'month'}>Choose days of the month</option>
-            </select>
-          </div>
+          <SelectDropDown onChange={handleSelectChange}/>
 
           <div onMouseLeave={handleMouseOut} className='w-full h-12 flex justify-between select-none
                           lg:h-16'>

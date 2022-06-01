@@ -11,6 +11,7 @@ module.exports = {
         'plus-jakarta-sans': ['Plus Jakarta Sans', 'sans-serif']
       },
       spacing: {
+        '68': '17rem',
         '116': '29rem',
         '144': '36rem'
       }

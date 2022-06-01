@@ -42,20 +42,6 @@ class SelectWeekMonth extends React.Component {
     console.log(event.target.value)
   }
 
-  changeDaysSelected(event) {
-    const selectedVal = event.target.getAttribute('value');
-    const days = this.state.daysSelected;
-
-    if (!days.includes(selectedVal)) {
-      this.setState({ daysSelected: [...this.state.daysSelected, selectedVal],
-                       selecting: true });
-    } else {
-      days.splice(days.indexOf(selectedVal), 1);
-      this.setState({ daysSelected: days,
-                      selecting: false });
-    }
-  }
-  //hover
   handleSelectWeekDays(event) {
     if (!this.state.toggle) return
 
@@ -65,7 +51,9 @@ class SelectWeekMonth extends React.Component {
     if (this.state.selecting) {
       this.setState({ daysSelected: [...this.state.daysSelected, selectedVal]})
     } else {
-      days.splice(days.indexOf(selectedVal), 1);
+      if (!days.includes(selectedVal)) return
+
+      const removed = days.splice(days.indexOf(selectedVal), 1);
       this.setState({ daysSelected: days});
     }
 
@@ -89,7 +77,6 @@ class SelectWeekMonth extends React.Component {
         selecting: false
       });
     }
-    // this.changeDaysSelected(event);
   }
 
   handleMouseUp() {

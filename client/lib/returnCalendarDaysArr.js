@@ -6,40 +6,52 @@ function returnCalendarDaysArr(date) {
 
   const dateData = {
     dayVal: date.getDate(),  // 1-30
-    dayOfWeek: date.getDay(),  // 0-6
-    currMonth: date.getMonth(),
-    currYear: date.getYear()
+    dayOfWeekVal: date.getDay(),  // 0-6
+    monthVal: date.getMonth(),
+    yearVal: date.getFullYear()
   }
 
-  const { dayVal, dayOfWeek, currMonth, currYear } = dateData;
+  const { dayVal, dayOfWeekVal, monthVal, yearVal } = dateData;
 
   // fill back wards
+
   let currDay = dayVal;
-  // for (let i = dayOfWeek; i >= 0; i--) {
-
-  //   if (currDay === 0) {
-  //     currDay = 32 - new Date(currYear, (currMonth - 1), 32).getDate();
-
-  //   }
-  //   arr.splice(i, 0, currDay);
-  //   currDay--;
+  // let currDay = {
+  //   month: monthVal,
+  //   day: dayVal,
+  //   year: yearVal,
+  //   week: dayOfWeekVal
   // }
 
-  //fill forward
-  // currDay = dayVal;
-  // for (let j = dayOfWeek; j < arr.length; j++) {
+  console.log(dayVal);
+  console.log(currDay);
 
-  //   if (currDay > ( 32 - new Date(currYear, currMonth, 32).getDate())) {
-  //     currDay = 32 - new Date(currYear, currMonth, 32).getDate();
-  //   }
+  for (let i = dayOfWeekVal; i >= 0; i--) {
 
-  //   arr.splice(j, 0, currDay);
-  //   currDay++
-  // }
+    if (currDay === 0) {
+      currDay = 32 - new Date(yearVal, (monthVal - 1), 32).getDate();
+      // currDay.month = currDay.month - 1;
+    }
 
-  console.log('bruuh');
+    arr.splice(i, 1, currDay);
+    currDay--;
+  }
+
+  // fill forward
+  currDay = dayVal;
+  for (let j = dayOfWeekVal; j < arr.length; j++) {
+    if (currDay > ( 32 - new Date(yearVal, monthVal, 32).getDate())) {
+      currDay = 1;
+    }
+
+    arr.splice(j, 1, currDay);
+    currDay++
+  }
+
   return arr;
 }
 
 const output = returnCalendarDaysArr(new Date());
 console.log(output);
+
+export default returnCalendarDaysArr;

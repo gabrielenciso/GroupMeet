@@ -9,7 +9,7 @@ function SelectDropDown(props) {
     <div className='w-full text-center mt-8 mb-5'>
       <select onChange={onChange}
 
-        className='select select-ghost w-3/4 p-1 font-nunito-sans font-light text-xl active:outline-none
+        className='select select-ghost w-68 p-1 font-nunito-sans font-light text-xl active:outline-none
       focus:outline-none focus:border-b focus:border-b-blue-500
               lg:w-68'>
 
@@ -112,8 +112,9 @@ class SelectWeekMonth extends React.Component {
     if (this.state.view === 'week') {
 
       selectView = (
-        <div onMouseLeave={handleMouseOut} className='w-full h-12 flex justify-between select-none
-                          lg:h-16'>
+        <div onMouseLeave={handleMouseOut} className='w-full px-4 h-12 flex justify-between select-none
+                          lg:h-16 lg:px-0'>
+
           <CreateWeek mousedown={handleMouseDown} mouseup={handleMouseUp} selecting={handleSelectWeekDays} selectdays={this.state.daysSelected} />
         </div>
       )
@@ -126,8 +127,8 @@ class SelectWeekMonth extends React.Component {
 
     console.log(selectView);
     return (
-      <div className='w-full mx-4 min-h-fit
-                      lg:w-116 lg:mt-10 lg:order-4 lg:mx-0'>
+      <div className='w-full mx-0 min-h-fit
+                      lg:w-116 lg:mt-7 lg:order-4 lg:mx-0'>
 
           <SelectDropDown onChange={handleSelectChange}/>
           {selectView}

@@ -27,10 +27,10 @@ export default class MeetingForm extends React.Component {
       <>
       <Header />
       <div className='w-96 m-auto
-                      lg:w-3/4 lg:m-auto lg:mt-10'>
+                      lg:w-4/5 lg:m-auto lg:mt-10'>
         <form onSubmit={this.handleSubmit}>
           <div className='flex flex-wrap
-                          lg:flex-col lg:flex-wrap lg:h-144'>
+                          lg:flex-col lg:flex-wrap lg:items-center lg:h-144'>
             <MeetingDetails />
             <SelectWeekMonth />
             <ChooseTime />

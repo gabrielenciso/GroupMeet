@@ -125,10 +125,9 @@ class SelectWeekMonth extends React.Component {
       )
     }
 
-    console.log(selectView);
     return (
       <div className='w-full mx-0 min-h-fit
-                      lg:w-116 lg:mt-7 lg:order-4 lg:mx-0'>
+                      lg:w-128 lg:mt-7 lg:order-4 lg:mx-0'>
 
           <SelectDropDown onChange={handleSelectChange}/>
           {selectView}

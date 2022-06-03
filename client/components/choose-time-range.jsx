@@ -11,7 +11,7 @@ function ChooseTimeLabel() {
 }
 
 
-export default class ChooseTime extends React.Component {
+export default class ChooseTimeRange extends React.Component {
 
   constructor(props) {
     super(props);

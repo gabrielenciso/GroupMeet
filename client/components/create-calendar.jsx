@@ -17,14 +17,14 @@ class CalendarDays extends React.Component {
   render() {
 
     const { date, arrayDates, handlers } = this.props
-    const { handleMouseDown, handleMouseUp, handleSelectWeekDays, daysSelected} = this.context;
+    const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected} = this.context;
 
     const blocks = arrayDates.map((day, index) => {
       const color = daysSelected.includes(day.toString()) ? 'bg-green-500' : 'bg-gray-300';
       const boldToday = (date.getDate() === day.getDate() && date.getMonth() === day.getMonth())
         ? 'font-bold text-xl' : 'font-thin';
       return (
-        <div key={index} value={day.toString()} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOver={handleSelectWeekDays}
+        <div key={index} value={day.toString()} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOver={handleSelectDays}
           className={`h-12 w-12 font-plus-jakarta-sans ${boldToday} center-all ${color} hover:cursor-pointer
                   lg:h-16 lg:w-16`}>
           {day.getDate()}
@@ -123,6 +123,7 @@ export default class CreateCalendar extends React.Component {
 
   render() {
     const { date, scrollCount } = this.state;
+    const { handleMouseOut } = this.context;
 
     const arrayDates = returnCalendarDaysArr(date, scrollCount);
 
@@ -151,3 +152,5 @@ export default class CreateCalendar extends React.Component {
     )
   }
 }
+
+CreateCalendar.contextType = SelectingDaysContext;

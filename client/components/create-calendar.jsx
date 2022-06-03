@@ -114,10 +114,8 @@ export default class CreateCalendar extends React.Component {
     const scrollDirection = event.target.getAttribute('value');
     if (scrollDirection === 'down') {
       this.setState({ scrollCount: this.state.scrollCount + 1 });
-      console.log('down');
     } else {
       this.setState({ scrollCount: this.state.scrollCount - 1 });
-      console.log('up');
     }
   }
 

@@ -1,5 +1,5 @@
 
-function returnCalendarDaysArr(date) {
+function returnCalendarDaysArr(date, scrollCount) {
   const arr = [];
   arr.length = 35;
   arr.fill({})
@@ -17,8 +17,11 @@ function returnCalendarDaysArr(date) {
   for (let i = dayOfWeekVal; i >= 0; i--) {
 
     const currDay = new Date(date);
-    currDay.setDate(currDay.getDate() - (dayOfWeekVal - i));
+    if (scrollCount > 0) {
+      currDay.setDate(currDay.getDate() + (scrollCount * 7))
+    }
 
+    currDay.setDate(currDay.getDate() - (dayOfWeekVal - i));
     arr.splice(i, 1, currDay);
   }
 
@@ -26,8 +29,11 @@ function returnCalendarDaysArr(date) {
   for (let i = dayOfWeekVal; i < arr.length; i++) {
 
     const currDay = new Date(date);
-    currDay.setDate(currDay.getDate() + (i - dayOfWeekVal));
+    if (scrollCount > 0) {
+      currDay.setDate(currDay.getDate() + (scrollCount * 7))
+    }
 
+    currDay.setDate(currDay.getDate() + (i - dayOfWeekVal));
     arr.splice(i, 1, currDay);
   }
 

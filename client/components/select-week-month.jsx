@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import CreateWeek from './create-week.jsx';
 import CreateCalendar from './create-calendar.jsx'
+import SelectingDaysContext from '../lib/selecting-days-context.js';
 
 
 function SelectDropDown(props) {
   const { onChange } = props;
   return (
-    <div className='w-full text-center mt-8 mb-5'>
+    <div className='w-full text-center mt-8 mb-3'>
       <select onChange={onChange}
 
         className='select select-ghost w-68 p-1 font-nunito-sans font-light text-xl active:outline-none
@@ -20,24 +22,24 @@ function SelectDropDown(props) {
   )
 }
 
-function CreateWeek(props) {
-  const {mousedown, mouseup, selecting, selectdays} = props;
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const week = days.map((day, index) => {
-    const color = selectdays.includes(day) ? 'bg-green-500' : 'bg-gray-300';
+// function CreateWeek(props) {
+//   const {mousedown, mouseup, selecting, selectdays} = props;
+//   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+//   const week = days.map((day, index) => {
+//     const color = selectdays.includes(day) ? 'bg-green-500' : 'bg-gray-300';
 
-    return(
-      <span key={index} onMouseDown={mousedown} onMouseUp={mouseup} onMouseOver={selecting} value={day}
+//     return(
+//       <span key={index} onMouseDown={mousedown} onMouseUp={mouseup} onMouseOver={selecting} value={day}
 
-        className={`h-full w-12 ${color} font-nunito-sans font-thin center-all hover:cursor-pointer
-                                  lg:w-16`}>
-        {day}
-      </span>
-    )
-  });
+//         className={`h-full w-12 ${color} font-nunito-sans font-thin center-all hover:cursor-pointer
+//                                   lg:w-16`}>
+//         {day}
+//       </span>
+//     )
+//   });
 
-  return week;
-}
+//   return week;
+// }
 
 class SelectWeekMonth extends React.Component {
   constructor(props) {
@@ -58,6 +60,7 @@ class SelectWeekMonth extends React.Component {
 
   handleSelectChange(event) {
     this.setState({ view: event.target.value });
+    this.setState({ daysSelected: [] });
   }
 
   handleSelectWeekDays(event) {
@@ -107,18 +110,18 @@ class SelectWeekMonth extends React.Component {
 
   render() {
     const { handleSelectChange, handleSelectWeekDays, handleMouseDown, handleMouseUp, handleMouseOut } = this;
+    const { daysSelected } = this.state;
+    const contextValues = { handleSelectChange, handleSelectWeekDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected };
 
-    let selectView = '';
+    let selectView;
     if (this.state.view === 'week') {
-
       selectView = (
         <div onMouseLeave={handleMouseOut} className='w-full px-4 h-12 flex justify-between select-none
-                          lg:h-16 lg:px-0'>
+                          lg:h-16 lg:px-6'>
 
-          <CreateWeek mousedown={handleMouseDown} mouseup={handleMouseUp} selecting={handleSelectWeekDays} selectdays={this.state.daysSelected} />
+          <CreateWeek/>
         </div>
       )
-
     } else if (this.state.view === 'month') {
       selectView = (
         <CreateCalendar />
@@ -126,12 +129,14 @@ class SelectWeekMonth extends React.Component {
     }
 
     return (
-      <div className='w-full mx-0 min-h-fit
-                      lg:w-128 lg:mt-7 lg:order-4 lg:mx-0'>
+      <SelectingDaysContext.Provider value={contextValues}>
+        <div className='w-full mx-0 min-h-fit
+                        lg:w-128 lg:mt-7 lg:order-4 lg:mx-0'>
 
-          <SelectDropDown onChange={handleSelectChange}/>
-          {selectView}
-      </div>
+            <SelectDropDown onChange={handleSelectChange}/>
+            {selectView}
+        </div>
+      </SelectingDaysContext.Provider>
     )
   }
 }

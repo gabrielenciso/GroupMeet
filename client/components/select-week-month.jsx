@@ -15,8 +15,8 @@ function SelectDropDown(props) {
       focus:outline-none focus:border-b focus:border-b-blue-500
               lg:w-68'>
 
-        <option value={'week'}>Choose days of the week</option>
         <option value={'month'}>Choose days of the month</option>
+        <option value={'week'}>Choose days of the week</option>
       </select>
     </div>
   )
@@ -26,7 +26,7 @@ class SelectWeekMonth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'week',
+      view: 'month',
       daysSelected: [],
       toggle: false,
       selecting: false

@@ -34,57 +34,25 @@ export default class ChooseTimeRange extends React.Component {
 
   handleStartTime(event) {
     const { timeStart } = this.state;
-    const name = event.target.name;
-    if (name === 'hour') {
-      this.setState(prevState => ({
-        timeStart: {
-          ...prevState.timeStart,
-          hour: event.target.value
-        }
-      }));
-    } else if (name === 'minute') {
-      this.setState(prevState => ({
-        timeStart: {
-          ...prevState.timeStart,
-          minute: event.target.value
-        }
-      }));
-    } else if (name === 'ampm') {
-      this.setState(prevState => ({
-        timeStart: {
-          ...prevState.timeStart,
-          ampm: event.target.value
-        }
-      }));
-    }
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      timeStart: {
+        ...prevState.timeStart,
+        [name]: value
+      }
+    }));
   }
 
 
   handleEndTime(event) {
     const { timeEnd } = this.state;
-    const name = event.target.name;
-    if (name === 'hour') {
-      this.setState(prevState => ({
-        timeEnd: {
-          ...prevState.timeEnd,
-          hour: event.target.value
-        }
-      }));
-    } else if (name === 'minute') {
-      this.setState(prevState => ({
-        timeEnd: {
-          ...prevState.timeEnd,
-          minute: event.target.value
-        }
-      }));
-    } else if (name === 'ampm') {
-      this.setState(prevState => ({
-        timeEnd: {
-          ...prevState.timeEnd,
-          ampm: event.target.value
-        }
-      }));
-    }
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      timeEnd: {
+        ...prevState.timeEnd,
+        [name]: value
+      }
+    }));
   }
 
   render() {

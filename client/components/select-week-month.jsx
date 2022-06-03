@@ -22,25 +22,6 @@ function SelectDropDown(props) {
   )
 }
 
-// function CreateWeek(props) {
-//   const {mousedown, mouseup, selecting, selectdays} = props;
-//   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-//   const week = days.map((day, index) => {
-//     const color = selectdays.includes(day) ? 'bg-green-500' : 'bg-gray-300';
-
-//     return(
-//       <span key={index} onMouseDown={mousedown} onMouseUp={mouseup} onMouseOver={selecting} value={day}
-
-//         className={`h-full w-12 ${color} font-nunito-sans font-thin center-all hover:cursor-pointer
-//                                   lg:w-16`}>
-//         {day}
-//       </span>
-//     )
-//   });
-
-//   return week;
-// }
-
 class SelectWeekMonth extends React.Component {
   constructor(props) {
     super(props);
@@ -116,11 +97,7 @@ class SelectWeekMonth extends React.Component {
     let selectView;
     if (this.state.view === 'week') {
       selectView = (
-        <div onMouseLeave={handleMouseOut} className='w-full px-4 h-12 flex justify-between select-none
-                          lg:h-16 lg:px-6'>
-
-          <CreateWeek/>
-        </div>
+        <CreateWeek/>
       )
     } else if (this.state.view === 'month') {
       selectView = (

@@ -6,15 +6,15 @@ drop schema "public" cascade;
 
 create schema "public";
 
-CREATE TABLE "public"."meeting" (
+CREATE TABLE "public"."meetings" (
 	"meetingId" serial NOT NULL,
 	"name" TEXT NOT NULL,
 	"description" TEXT,
-	"createdAt" timestamp with time zone NOT NULL default now(),
 	"dates" TEXT NOT NULL,
 	"startTime" TEXT NOT NULL,
 	"endTime" TEXT NOT NULL,
 	"selectedBlocks" TEXT,
+	"createdAt" timestamp with time zone NOT NULL default now(),
 	CONSTRAINT "meeting_pk" PRIMARY KEY ("meetingId")
 ) WITH (
   OIDS=FALSE
@@ -24,10 +24,10 @@ CREATE TABLE "public"."meeting" (
 
 CREATE TABLE "public"."users" (
 	"userId" serial NOT NULL,
-	"userName" TEXT NOT NULL,
 	"meetingId" serial NOT NULL,
-	"createdAt" timestamp with time zone NOT NULL default now(),
+	"userName" TEXT NOT NULL,
 	"selectedTimes" TEXT,
+	"createdAt" timestamp with time zone NOT NULL default now(),
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
@@ -36,4 +36,4 @@ CREATE TABLE "public"."users" (
 
 
 
-ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("meetingId") REFERENCES "meeting"("meetingId");
+ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("meetingId") REFERENCES "meetings"("meetingId");

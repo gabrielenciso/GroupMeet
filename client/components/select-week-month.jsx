@@ -99,16 +99,16 @@ class SelectWeekMonth extends React.Component {
   }
 
   render() {
-    const { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays, daysSelected } = this.props;
+    const { handleSelectChange, view, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays, daysSelected } = this.props;
     // const { daysSelected } = this.state;
     const contextValues = { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected, handleDeselectDays };
 
     let selectView;
-    if (this.state.view === 'week') {
+    if (view === 'week') {
       selectView = (
         <CreateWeek/>
       )
-    } else if (this.state.view === 'month') {
+    } else if (view === 'month') {
       selectView = (
         <CreateCalendar />
       )

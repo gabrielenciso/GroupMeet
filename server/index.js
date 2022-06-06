@@ -29,14 +29,34 @@ app.use(express.json());
 // app.get('api/meeting/:')
 // get app.get request to make the table for the meeting page
 
-app.post('/api/meeting', (req, res, next) => {
+app.get('/api/meetings/:meetingId', (req, res, next) => {
+  const { meetingId } = req.params;
+
+  // ("name", "description", "dates", "startTime", "endTime", "selectedBlocks")
+  const sql = `
+  SELECT "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
+  FROM "meetings"
+  WHERE "meetingId" = $1
+  `;
+
+  const params = [meetingId];
+  db.query(sql, params)
+    .then(result => {
+      const [meeting] = result.rows;
+      console.log(meeting);
+      res.status(201).json(meeting);
+    })
+    .catch(err => next(err));
+})
+
+app.post('/api/meetings', (req, res, next) => {
   if (!req.body) {
     throw new ClientError(401, 'invalid meeting details');
   }
   const { name, description, daysSelected: dates, startTime, endTime } = req.body;
 
   const sql = `
-  insert into "meeting" ("name", "description", "dates", "startTime", "endTime")
+  insert into "meetings" ("name", "description", "dates", "startTime", "endTime")
   values ($1, $2, $3, $4, $5)
   returning *
   `;

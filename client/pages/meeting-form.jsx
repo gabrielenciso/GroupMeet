@@ -13,13 +13,12 @@ export default class MeetingForm extends React.Component {
     this.state ={
       name: '',
       description: '',
-      days: [],
-      timeStart: {
+      startTime: {
         hour: '1',
         minute: '0',
         ampm: 'AM'
       },
-      timeEnd: {
+      endTime: {
         hour: '1',
         minute: '0',
         ampm: 'AM'
@@ -145,17 +144,19 @@ export default class MeetingForm extends React.Component {
       body: JSON.stringify(body)
     };
 
-    fetch('/api/meeting', req)
+    fetch('/api/meetings', req)
       .then(res => res.json())
       .then(result => {
-        console.log('result: ', result)
+        console.log('result: ', result);
+        const meetingId = result.meetingId;
+        window.location.hash = `meetings?meetingId=${meetingId}`;
       })
       .catch(err => console.error(err));
   }
 
   render() {
     const { handleName, handleDescription, handleStartTime, handleEndTime, handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays } = this;
-    const { name, description, daysSelected } = this.state;
+    const { name, description, daysSelected, view } = this.state;
 
     return (
       <>
@@ -166,7 +167,7 @@ export default class MeetingForm extends React.Component {
           <div className='flex flex-wrap
                           lg:flex-col lg:flex-wrap lg:items-center lg:h-144'>
             <MeetingDetails handleName={handleName} handleDescription={handleDescription} nameVal={name} descVal={description}/>
-            <SelectWeekMonth handleSelectDays={handleSelectDays} handleSelectChange={handleSelectChange} handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleMouseOut={handleMouseOut} handleDeselectDays={handleDeselectDays} daysSelected={daysSelected} />
+            <SelectWeekMonth handleSelectDays={handleSelectDays} view={view} handleSelectChange={handleSelectChange} handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleMouseOut={handleMouseOut} handleDeselectDays={handleDeselectDays} daysSelected={daysSelected} />
             <ChooseTimeRange handleStartTime={handleStartTime} handleEndTime={handleEndTime}/>
             <div className='w-full center-all my-20
                             lg:w-96 lg:order-3'>

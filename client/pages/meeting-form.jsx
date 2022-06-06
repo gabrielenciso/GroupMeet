@@ -11,7 +11,11 @@ export default class MeetingForm extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
-
+      name: '',
+      description: '',
+      days: [],
+      startTime: '',
+      endTime: ''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -19,7 +23,21 @@ export default class MeetingForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target)
+
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state)
+    };
+
+    fetch('/api/meeting', req)
+      .then(res => res.json())
+      .then(result => {
+        console.log('result: ', result)
+      })
+      .catch(err => console.error(err));
   }
 
   render() {

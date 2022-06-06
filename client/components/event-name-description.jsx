@@ -17,12 +17,10 @@ class MeetingDetails extends React.Component {
 
   handleNameChange(event) {
     this.setState({ name: event.target.value })
-    console.log(event.target.value);
   }
 
   handleDescriptionChange(event) {
     this.setState({ description: event.target.value })
-    console.log(event.target.value);
   }
 
   render() {

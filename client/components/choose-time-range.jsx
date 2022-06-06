@@ -15,48 +15,10 @@ export default class ChooseTimeRange extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      timeStart: {
-        hour: '1',
-        minute: '0',
-        ampm: 'AM'
-      },
-      timeEnd: {
-        hour: '1',
-        minute: '0',
-        ampm: 'AM'
-      }
-    }
-
-    this.handleStartTime = this.handleStartTime.bind(this);
-    this.handleEndTime = this.handleEndTime.bind(this);
-  }
-
-  handleStartTime(event) {
-    const { timeStart } = this.state;
-    const { name, value } = event.target;
-    this.setState(prevState => ({
-      timeStart: {
-        ...prevState.timeStart,
-        [name]: value
-      }
-    }));
-  }
-
-
-  handleEndTime(event) {
-    const { timeEnd } = this.state;
-    const { name, value } = event.target;
-    this.setState(prevState => ({
-      timeEnd: {
-        ...prevState.timeEnd,
-        [name]: value
-      }
-    }));
   }
 
   render() {
-    const { handleStartTime, handleEndTime } = this;
+    const { handleStartTime, handleEndTime } = this.props;
     return (
       <div className='w-full text-center mt-12
                       lg:w-96 lg:order-2'>

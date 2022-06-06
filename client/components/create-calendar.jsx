@@ -17,7 +17,7 @@ class CalendarDays extends React.Component {
   render() {
 
     const { date, arrayDates, handlers } = this.props
-    const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected} = this.context;
+    const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected, handleDeselectDays} = this.context;
 
     const blocks = arrayDates.map((day, index) => {
       const color = daysSelected.includes(day.toString()) ? 'bg-green-500' : 'bg-gray-300';

@@ -37,6 +37,7 @@ class SelectWeekMonth extends React.Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
+    this.handleDeselectDays = this.handleDeselectDays.bind(this);
   }
 
   handleSelectChange(event) {
@@ -58,7 +59,15 @@ class SelectWeekMonth extends React.Component {
       days.splice(days.indexOf(selectedVal), 1);
       this.setState({ daysSelected: days});
     }
+  }
 
+  handleDeselectDays(event) {
+    const selectedVal = event.target.getAttribute('value');
+    const days = this.state.daysSelected.slice();
+
+
+    console.log('out');
+    console.log(event.target);
   }
 
   handleMouseDown(event) {
@@ -90,9 +99,9 @@ class SelectWeekMonth extends React.Component {
   }
 
   render() {
-    const { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut } = this;
-    const { daysSelected } = this.state;
-    const contextValues = { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected };
+    const { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays, daysSelected } = this.props;
+    // const { daysSelected } = this.state;
+    const contextValues = { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected, handleDeselectDays };
 
     let selectView;
     if (this.state.view === 'week') {

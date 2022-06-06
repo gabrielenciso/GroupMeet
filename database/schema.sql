@@ -9,12 +9,12 @@ create schema "public";
 CREATE TABLE "public"."meeting" (
 	"meetingId" serial NOT NULL,
 	"name" TEXT NOT NULL,
-	"description" TEXT NOT NULL,
+	"description" TEXT,
 	"createdAt" timestamp with time zone NOT NULL default now(),
 	"dates" TEXT NOT NULL,
 	"startTime" TEXT NOT NULL,
 	"endTime" TEXT NOT NULL,
-	"selectedBlocks" TEXT NOT NULL,
+	"selectedBlocks" TEXT,
 	CONSTRAINT "meeting_pk" PRIMARY KEY ("meetingId")
 ) WITH (
   OIDS=FALSE
@@ -27,7 +27,7 @@ CREATE TABLE "public"."users" (
 	"userName" TEXT NOT NULL,
 	"meetingId" serial NOT NULL,
 	"createdAt" timestamp with time zone NOT NULL default now(),
-	"selectedTimes" TEXT NOT NULL,
+	"selectedTimes" TEXT,
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE

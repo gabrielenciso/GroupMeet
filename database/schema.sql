@@ -10,10 +10,10 @@ CREATE TABLE "public"."meetings" (
 	"meetingId" serial NOT NULL,
 	"name" TEXT NOT NULL,
 	"description" TEXT,
-	"dates" TEXT NOT NULL,
-	"startTime" TEXT NOT NULL,
-	"endTime" TEXT NOT NULL,
-	"selectedBlocks" TEXT,
+	"dates" json NOT NULL,
+	"startTime" json NOT NULL,
+	"endTime" json NOT NULL,
+	"selectedBlocks" json,
 	"createdAt" timestamp with time zone NOT NULL default now(),
 	CONSTRAINT "meeting_pk" PRIMARY KEY ("meetingId")
 ) WITH (
@@ -26,7 +26,7 @@ CREATE TABLE "public"."users" (
 	"userId" serial NOT NULL,
 	"meetingId" serial NOT NULL,
 	"userName" TEXT NOT NULL,
-	"selectedTimes" TEXT,
+	"selectedTimes" json,
 	"createdAt" timestamp with time zone NOT NULL default now(),
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (

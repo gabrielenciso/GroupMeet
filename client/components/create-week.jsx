@@ -9,7 +9,7 @@ export default class CreateWeek extends React.Component {
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const week = days.map((day, index) => {
-      const color = daysSelected.includes(day) ? 'bg-green-500' : 'bg-gray-300';
+      const color = daysSelected.days.includes(day) ? 'bg-green-500' : 'bg-gray-300';
 
       return (
         <span key={index} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOver={handleSelectDays} value={day}

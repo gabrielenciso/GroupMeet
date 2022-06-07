@@ -20,7 +20,7 @@ class CalendarDays extends React.Component {
     const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected, handleDeselectDays} = this.context;
 
     const blocks = arrayDates.map((day, index) => {
-      const color = daysSelected.includes(day.toString()) ? 'bg-green-500' : 'bg-gray-300';
+      const color = daysSelected.days.includes(day.toString()) ? 'bg-green-500' : 'bg-gray-300';
       const boldToday = (date.getDate() === day.getDate() && date.getMonth() === day.getMonth())
         ? 'font-bold text-xl' : 'font-thin';
       return (

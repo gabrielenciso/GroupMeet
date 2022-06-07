@@ -10,7 +10,7 @@ CREATE TABLE "public"."meetings" (
 	"meetingId" serial NOT NULL,
 	"name" TEXT NOT NULL,
 	"description" TEXT,
-	"dates" json NOT NULL,
+	"dates" text NOT NULL,
 	"startTime" json NOT NULL,
 	"endTime" json NOT NULL,
 	"selectedBlocks" json,

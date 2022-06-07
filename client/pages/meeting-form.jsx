@@ -23,7 +23,9 @@ export default class MeetingForm extends React.Component {
         minute: '0',
         ampm: 'AM'
       },
-      daysSelected: [],
+      daysSelected: {
+        days: []
+      },
       view: 'month',
       toggle: false,
       selecting: false
@@ -38,7 +40,7 @@ export default class MeetingForm extends React.Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
-    this.handleDeselectDays = this.handleDeselectDays.bind(this);
+    // this.handleDeselectDays = this.handleDeselectDays.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -74,49 +76,74 @@ export default class MeetingForm extends React.Component {
 
   handleSelectChange(event) {
     this.setState({ view: event.target.value });
-    this.setState({ daysSelected: [] });
+    this.setState({
+      daysSelected: {
+        days: []
+      }
+    });
   }
 
   handleSelectDays(event) {
     if (!this.state.toggle) return
 
     const selectedVal = event.target.getAttribute('value');
-    const days = this.state.daysSelected.slice();
+    const days = this.state.daysSelected.days.slice();
 
     if (this.state.selecting) {
-      this.setState({ daysSelected: [...this.state.daysSelected, selectedVal] })
+      this.setState({
+        daysSelected: {
+          days: [...this.state.daysSelected.days, selectedVal]
+        }
+      })
     } else {
       if (!days.includes(selectedVal)) return
 
       days.splice(days.indexOf(selectedVal), 1);
-      this.setState({ daysSelected: days });
+      this.setState({
+        daysSelected: {
+          days: days
+        }
+      });
     }
+    // if (this.state.selecting) {
+    //   this.setState({ daysSelected: [...this.state.daysSelected, selectedVal] })
+    // } else {
+    //   if (!days.includes(selectedVal)) return
+
+    //   days.splice(days.indexOf(selectedVal), 1);
+    //   this.setState({ daysSelected: days });
+    // }
   }
 
-  handleDeselectDays(event) {
-    const selectedVal = event.target.getAttribute('value');
-    const days = this.state.daysSelected.slice();
+  // handleDeselectDays(event) {
+  //   const selectedVal = event.target.getAttribute('value');
+  //   const days = this.state.daysSelected.slice();
 
 
-    console.log('out');
-    console.log(event.target);
-  }
+  //   console.log('out');
+  //   console.log(event.target);
+  // }
 
   handleMouseDown(event) {
     this.setState({ toggle: true });
 
     const selectedVal = event.target.getAttribute('value');
-    const days = this.state.daysSelected.slice();
+    const days = this.state.daysSelected.days.slice();
 
     if (!days.includes(selectedVal)) {
       this.setState({
-        daysSelected: [...this.state.daysSelected, selectedVal],
+        daysSelected: {
+          days: [...this.state.daysSelected.days, selectedVal]
+        },
         selecting: true
-      });
+      })
     } else {
+
       days.splice(days.indexOf(selectedVal), 1);
       this.setState({
-        daysSelected: days,
+        daysSelected: {
+          days: days
+        },
         selecting: false
       });
     }
@@ -134,7 +161,13 @@ export default class MeetingForm extends React.Component {
     event.preventDefault();
     console.log('submitted');
 
-    const { name, description, daysSelected, startTime, endTime } = this.state;
+    let { name, description, daysSelected, startTime, endTime } = this.state;
+    const sortedDates = daysSelected.days.sort((a, b) => {
+      const date1 = new Date(a);
+      const date2 = new Date(b);
+      return date1 - date2;
+    })
+
     const body = { name, description, daysSelected, startTime, endTime };
     const req = {
       method: 'POST',

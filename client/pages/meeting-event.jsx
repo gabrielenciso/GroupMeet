@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
+import returnTimesArr from '../lib/returnTimesArr.js'
 
 function MeetingTitle(props) {
   return (
@@ -42,8 +42,92 @@ function RegistrationForm(props) {
         </a>
       </form>
     </div>
-
   )
+}
+
+class MeetingBlocks extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+
+  render() {
+    const { dates, startTime, endTime } = this.props;
+    if (dates.length === 0) return;
+
+    const days = JSON.parse(dates).days;
+    console.log(days);
+    const times = returnTimesArr(startTime, endTime);
+
+    const rows = [];
+    for (let i = 0; i < times.length - 1; i++) {
+      const row = [];
+      for (let j = 0; j < days.length; j++) {
+        const block = (
+          <div time={times[i]} date={days[j]} key={j}
+            className='h-3 w-14 bg-gray-300 mr-0.5'></div>
+        )
+        row.push(block);
+      }
+      rows.push(row);
+    }
+
+    const blocks = rows.map((row, index) =>
+      <div key={index} className='blocks flex justify-center'>
+        {row}
+      </div>
+    );
+
+    const hours = times.filter(time => {
+      for (let i = 0; i < time.length; i++) {
+        if (time[i] === ':') {
+          if (time[i+1] === '0' && time[i+2] === '0'){
+            return true;
+          }
+        }
+      }
+      return false;
+    })
+
+    const timeLabels = hours.map(hour => {
+      return (
+        <div key={hour} className='font-plus-jakarta-sans text-xxs font-light'>
+          {hour}
+        </div>
+      )
+    });
+
+    const dateLabels = days.map(day => {
+      const dayArr = day.split(' ');
+
+      return (
+        <div key={day} className='text-center font-plus-jakarta-sans'>
+          <div className='text-xs'>
+            { [dayArr[1], dayArr[2]].join(' ') }
+          </div>
+          <div className='text-base'>
+            { dayArr[0][0] }
+          </div>
+        </div>
+      )
+    })
+
+    return(
+      <>
+      <div className='flex justify-center'>
+        <div className='flex flex-col justify-between mt-20 mb-10 mr-1'>
+          {timeLabels}
+        </div>
+        <div className='my-10 w-min flex flex-wrap justify-center'>
+            <div className='w-full flex justify-around'>
+              {dateLabels}
+            </div>
+          {blocks}
+        </div>
+      </div>
+      </>
+    )
+  }
 }
 
 export default class MeetingEvent extends React.Component {
@@ -62,7 +146,6 @@ export default class MeetingEvent extends React.Component {
   componentDidMount() {
     const route = this.props.route;
     const meetingId = route.params.get('meetingId');
-    console.log(meetingId);
 
     fetch(`api/meetings/${meetingId}`)
       .then(res => res.json())
@@ -81,7 +164,10 @@ export default class MeetingEvent extends React.Component {
   }
 
   render() {
-    const { name, description } = this.state;
+    const { name, description, dates, startTime, endTime } = this.state;
+
+    // const array = returnTimesArr(startTime, endTime);
+    // console.log(array);
     return(
       <>
         <Header />
@@ -92,15 +178,17 @@ export default class MeetingEvent extends React.Component {
             <RegistrationForm label={'Register as a participant'} />
           </div>
           <div className='w-full lg:w-1/2 text-center'>
-            <h1 className='font-nunito-sans text-xl font-thin mt-10'>Group's Availability</h1>
-            <h3 className='font-nunito-sans mt-4'>0 registered</h3>
+            <h1 className='font-nunito-sans text-xl font-thin mt-10'>
+              Group's Availability
+            </h1>
+            <h3 className='font-nunito-sans mt-4'>
+              0 registered
+            </h3>
+            <MeetingBlocks dates={dates} startTime={startTime} endTime={endTime} />
           </div>
         </div>
       </>
 
-      // name and description from data base
-      // registration form
-      // group availability
       // table made from data base
     )
   }

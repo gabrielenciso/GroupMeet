@@ -6,4 +6,13 @@
   .center-all {
     @apply flex justify-center items-center
   }
+
+}
+
+.blocks:nth-child(4n + 3) {
+  border-bottom: dashed 0.5px #6b7280;
+}
+
+.blocks:nth-child(4n + 1) {
+  margin-bottom: 0.125rem;
 }

@@ -1,11 +1,11 @@
-var chunk = require('lodash/chunk');
-var flatten = require('lodash/flatten');
+const chunk = require('lodash/chunk');
+const flatten = require('lodash/flatten');
 // var returnCalendarDaysArr = require('./returnCalendarDaysArr.js');
 
 function returnMonthLabels(arrayDates) {
 
   const chunked = chunk(arrayDates, 7);
-  let months = []
+  let months = [];
 
   for (let i = 0; i < chunked.length; i++) {
     let month = [];

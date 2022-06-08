@@ -1,15 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
 import SelectingDaysContext from '../lib/selecting-days-context';
 
 export default class CreateWeek extends React.Component {
 
-  render () {
+  render() {
     const { handleMouseDown, handleMouseUp, handleMouseOut, handleSelectDays, daysSelected } = this.context;
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const week = days.map((day, index) => {
-      const color = daysSelected.includes(day) ? 'bg-green-500' : 'bg-gray-300';
+      const color = daysSelected.days.includes(day) ? 'bg-green-500' : 'bg-gray-300';
 
       return (
         <span key={index} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOver={handleSelectDays} value={day}
@@ -18,7 +17,7 @@ export default class CreateWeek extends React.Component {
                                   lg:w-16`}>
           {day}
         </span>
-      )
+      );
     });
 
     return (
@@ -26,7 +25,7 @@ export default class CreateWeek extends React.Component {
                           lg:h-16 lg:px-6'>
             {week}
       </div>
-    )
+    );
   }
 }
 

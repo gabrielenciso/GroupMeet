@@ -133,35 +133,67 @@ class UserMeetingBlocks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
-    }
+      blocks: {
+        selected: []
+      },
+      selecting: false,
+      toggle: false
+    };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
   handleMouseDown(event) {
-    console.log(event.target);
+    const col = event.target.getAttribute('col');
+    const row = event.target.getAttribute('row');
+    const block = { col, row };
+
+    this.setState({
+      toggle: true,
+      blocks: {
+        selected: [...this.state.blocks.selected, block]
+      }
+    });
+  }
+
+  handleMouseUp(event) {
+
   }
 
   render() {
-    const { handleMouseDown } = this;
+    const { handleMouseDown, handleMouseUp } = this;
+    const { selected } = this.state.blocks;
 
     const { dates, startTime, endTime } = this.props;
     if (dates.length === 0) return;
-
     const days = JSON.parse(dates).days;
     const times = returnTimesArr(startTime, endTime);
 
     const rows = [];
     for (let i = 0; i < times.length - 1; i++) {
+
       const row = [];
       for (let j = 0; j < days.length; j++) {
+
+        let color = 'bg-gray-300';
+        for (let k = 0; k < selected.length; k++) {
+
+          if (selected[k].row === i.toString() && selected[k].col === j.toString()) {
+            color = 'bg-green-500';
+            break;
+          }
+
+        }
+
         const block = (
-          <div key={j} time={times[i]} date={days[j]} col={j} row={i} onMouseDown={handleMouseDown}
-            className='h-3 w-14 bg-gray-300 mr-0.5'></div>
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}
+            className={`h-3 w-14 ${color} mr-0.5`}></div>
         );
         row.push(block);
+
       }
+
       rows.push(row);
     }
 

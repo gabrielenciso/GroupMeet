@@ -1,9 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
 import CreateWeek from './create-week.jsx';
-import CreateCalendar from './create-calendar.jsx'
+import CreateCalendar from './create-calendar.jsx';
 import SelectingDaysContext from '../lib/selecting-days-context.js';
-
 
 function SelectDropDown(props) {
   const { onChange } = props;
@@ -15,11 +13,11 @@ function SelectDropDown(props) {
       focus:outline-none focus:border-b focus:border-b-blue-500
               lg:w-68'>
 
-        <option value={'month'}>Choose days of the month</option>
-        <option value={'week'}>Choose days of the week</option>
+        <option value="month">Choose days of the month</option>
+        <option value="week">Choose days of the week</option>
       </select>
     </div>
-  )
+  );
 }
 
 class SelectWeekMonth extends React.Component {
@@ -30,14 +28,13 @@ class SelectWeekMonth extends React.Component {
       daysSelected: [],
       toggle: false,
       selecting: false
-    }
+    };
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSelectDays = this.handleSelectDays.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
-    this.handleDeselectDays = this.handleDeselectDays.bind(this);
   }
 
   handleSelectChange(event) {
@@ -46,28 +43,19 @@ class SelectWeekMonth extends React.Component {
   }
 
   handleSelectDays(event) {
-    if (!this.state.toggle) return
+    if (!this.state.toggle) return;
 
     const selectedVal = event.target.getAttribute('value');
     const days = this.state.daysSelected.slice();
 
     if (this.state.selecting) {
-      this.setState({ daysSelected: [...this.state.daysSelected, selectedVal]})
+      this.setState({ daysSelected: [...this.state.daysSelected, selectedVal] });
     } else {
-      if (!days.includes(selectedVal)) return
+      if (!days.includes(selectedVal)) return;
 
       days.splice(days.indexOf(selectedVal), 1);
-      this.setState({ daysSelected: days});
+      this.setState({ daysSelected: days });
     }
-  }
-
-  handleDeselectDays(event) {
-    const selectedVal = event.target.getAttribute('value');
-    const days = this.state.daysSelected.slice();
-
-
-    console.log('out');
-    console.log(event.target);
   }
 
   handleMouseDown(event) {
@@ -91,7 +79,7 @@ class SelectWeekMonth extends React.Component {
   }
 
   handleMouseUp() {
-    this.setState({ toggle: false })
+    this.setState({ toggle: false });
   }
 
   handleMouseOut() {
@@ -99,19 +87,19 @@ class SelectWeekMonth extends React.Component {
   }
 
   render() {
-    const { handleSelectChange, view, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays, daysSelected } = this.props;
+    const { handleSelectChange, view, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected } = this.props;
     // const { daysSelected } = this.state;
-    const contextValues = { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected, handleDeselectDays };
+    const contextValues = { handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, daysSelected };
 
     let selectView;
     if (view === 'week') {
       selectView = (
         <CreateWeek/>
-      )
+      );
     } else if (view === 'month') {
       selectView = (
         <CreateCalendar />
-      )
+      );
     }
 
     return (
@@ -123,7 +111,7 @@ class SelectWeekMonth extends React.Component {
             {selectView}
         </div>
       </SelectingDaysContext.Provider>
-    )
+    );
   }
 }
 

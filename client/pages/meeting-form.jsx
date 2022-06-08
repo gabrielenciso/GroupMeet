@@ -1,7 +1,6 @@
 import React from 'react';
-import HelloWorld from '../components/hello-world';
 import Header from '../components/header';
-import MeetingDetails from '../components/event-name-description'
+import MeetingDetails from '../components/event-name-description';
 import SelectWeekMonth from '../components/select-week-month';
 import ChooseTimeRange from '../components/choose-time-range';
 import Button from '../components/button';
@@ -10,7 +9,7 @@ export default class MeetingForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state ={
+    this.state = {
       name: '',
       description: '',
       startTime: {
@@ -29,7 +28,7 @@ export default class MeetingForm extends React.Component {
       view: 'month',
       toggle: false,
       selecting: false
-    }
+    };
 
     this.handleName = this.handleName.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
@@ -44,15 +43,14 @@ export default class MeetingForm extends React.Component {
   }
 
   handleName(event) {
-    this.setState({ name: event.target.value })
+    this.setState({ name: event.target.value });
   }
 
   handleDescription(event) {
-    this.setState({ description: event.target.value })
+    this.setState({ description: event.target.value });
   }
 
   handleStartTime(event) {
-    const { startTime } = this.state;
     const { name, value } = event.target;
     this.setState(prevState => ({
       startTime: {
@@ -63,7 +61,6 @@ export default class MeetingForm extends React.Component {
   }
 
   handleEndTime(event) {
-    const { endTime } = this.state;
     const { name, value } = event.target;
     this.setState(prevState => ({
       endTime: {
@@ -83,7 +80,7 @@ export default class MeetingForm extends React.Component {
   }
 
   handleSelectDays(event) {
-    if (!this.state.toggle) return
+    if (!this.state.toggle) return;
 
     const selectedVal = event.target.getAttribute('value');
     const days = this.state.daysSelected.days.slice();
@@ -93,14 +90,14 @@ export default class MeetingForm extends React.Component {
         daysSelected: {
           days: [...this.state.daysSelected.days, selectedVal]
         }
-      })
+      });
     } else {
-      if (!days.includes(selectedVal)) return
+      if (!days.includes(selectedVal)) return;
 
       days.splice(days.indexOf(selectedVal), 1);
       this.setState({
         daysSelected: {
-          days: days
+          days
         }
       });
     }
@@ -118,13 +115,13 @@ export default class MeetingForm extends React.Component {
           days: [...this.state.daysSelected.days, selectedVal]
         },
         selecting: true
-      })
+      });
     } else {
 
       days.splice(days.indexOf(selectedVal), 1);
       this.setState({
         daysSelected: {
-          days: days
+          days
         },
         selecting: false
       });
@@ -132,7 +129,7 @@ export default class MeetingForm extends React.Component {
   }
 
   handleMouseUp() {
-    this.setState({ toggle: false })
+    this.setState({ toggle: false });
   }
 
   handleMouseOut() {
@@ -141,14 +138,13 @@ export default class MeetingForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log('submitted');
 
-    let { name, description, daysSelected, startTime, endTime } = this.state;
-    const sortedDates = daysSelected.days.sort((a, b) => {
+    const { name, description, daysSelected, startTime, endTime } = this.state;
+    daysSelected.days.sort((a, b) => {
       const date1 = new Date(a);
       const date2 = new Date(b);
       return date1 - date2;
-    })
+    });
 
     const body = { name, description, daysSelected, startTime, endTime };
     const req = {
@@ -162,7 +158,6 @@ export default class MeetingForm extends React.Component {
     fetch('/api/meetings', req)
       .then(res => res.json())
       .then(result => {
-        console.log('result: ', result);
         const meetingId = result.meetingId;
         window.location.hash = `meetings?meetingId=${meetingId}`;
       })
@@ -193,7 +188,7 @@ export default class MeetingForm extends React.Component {
         </form>
       </div>
       </>
-    )
+    );
   }
 
 }

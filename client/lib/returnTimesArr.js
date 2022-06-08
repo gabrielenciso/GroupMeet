@@ -6,13 +6,13 @@ function returnTimesArr(startTime, endTime) {
   let startAMPM = startTime.ampm;
   const endHour = parseInt(endTime.hour);
   const endMin = parseInt(endTime.minute);
-  const endAMPM = endTime.ampm;
 
   const array = [];
 
   while (1) {
-    const time = startMin === 0 ? `${startHour}:00 ${startAMPM}` :
-    `${startHour}:${startMin} ${startAMPM}`;
+    const time = startMin === 0
+      ? `${startHour}:00 ${startAMPM}`
+      : `${startHour}:${startMin} ${startAMPM}`;
 
     array.push(time);
 
@@ -35,7 +35,6 @@ function returnTimesArr(startTime, endTime) {
     // }
   }
 
-
   return array;
 }
 
@@ -52,7 +51,5 @@ function returnTimesArr(startTime, endTime) {
 // }
 // const times = returnTimesArr(startTime, endTime);
 // console.log(times);
-
-
 
 export default returnTimesArr;

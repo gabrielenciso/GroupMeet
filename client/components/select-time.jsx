@@ -1,15 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 
 export default class SelectTime extends React.Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { getTime } = this.props;
-    return(
+    return (
       <div className="py-1 px-3 w-32 font-nunito-sans bg-white rounded-lg border border-gray-400">
         <div className="flex justify-around">
           <select name="hour" onChange={getTime}
@@ -40,6 +35,6 @@ export default class SelectTime extends React.Component {
           </select>
         </div>
       </div>
-    )
+    );
   }
 }

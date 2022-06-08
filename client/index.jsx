@@ -1,5 +1,5 @@
-import './styles.css'
-import './layout.css'
+import './styles.css';
+import './layout.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';

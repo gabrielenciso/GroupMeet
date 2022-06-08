@@ -1,43 +1,37 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import returnCalendarDaysArr from '../lib/returnCalendarDaysArr.js';
 import returnMonthLabels from '../lib/returnMonthLabels.js';
 import returnYearLabels from '../lib/returnYearLabels.js';
 import SelectingDaysContext from '../lib/selecting-days-context.js';
 
-
 class CalendarDays extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    }
-  }
 
   render() {
 
-    const { date, arrayDates, handlers } = this.props
-    const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected, handleDeselectDays} = this.context;
+    const { date, arrayDates } = this.props;
+    const { handleMouseDown, handleMouseUp, handleSelectDays, daysSelected } = this.context;
 
     const blocks = arrayDates.map((day, index) => {
       const color = daysSelected.days.includes(day.toString()) ? 'bg-green-500' : 'bg-gray-300';
       const boldToday = (date.getDate() === day.getDate() && date.getMonth() === day.getMonth())
-        ? 'font-bold text-xl' : 'font-thin';
+        ? 'font-bold text-xl'
+        : 'font-thin';
       return (
         <div key={index} value={day.toString()} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseOver={handleSelectDays}
           className={`h-12 w-12 font-plus-jakarta-sans ${boldToday} center-all ${color} hover:cursor-pointer
                   lg:h-16 lg:w-16`}>
           {day.getDate()}
         </div>
-      )
-    })
+
+      );
+    });
 
     return (
       <div className='w-11/12 h-64 flex flex-wrap justify-between
                     lg:w-11/12 lg:m-0 lg:h-84'>
         {blocks}
       </div>
-    )
+    );
   }
 }
 CalendarDays.contextType = SelectingDaysContext;
@@ -54,7 +48,7 @@ function CalendarLabelWeek() {
         )
       }
     </div>
-  )
+  );
 }
 
 function CalendarLabelMonth(props) {
@@ -67,18 +61,18 @@ function CalendarLabelMonth(props) {
                 lg:text-xs lg:h-16 xl:rotate-0 xl:flex xl:justify-end'>
       {month}
     </div>
-  )
+  );
 
   return (
     <div className='w-4 h-64 flex flex-col justify-around
                     lg:h-84'>
       {blocks}
     </div>
-  )
+  );
 }
 
 function CalendarLabelYear(props) {
-   const { arrayDates } = props;
+  const { arrayDates } = props;
   const years = returnYearLabels(arrayDates);
 
   const blocks = years.map((year, index) =>
@@ -87,16 +81,15 @@ function CalendarLabelYear(props) {
                 lg:text-xs lg:h-16 xl:rotate-0 xl:ml-2'>
       {year}
     </div>
-  )
+  );
 
   return (
     <div className='w-4 h-64 flex flex-col justify-around
                     lg:h-84'>
       {blocks}
     </div>
-  )
+  );
 }
-
 
 export default class CreateCalendar extends React.Component {
 
@@ -105,7 +98,7 @@ export default class CreateCalendar extends React.Component {
     this.state = {
       date: new Date(),
       scrollCount: 0
-    }
+    };
 
     this.handleScroll = this.handleScroll.bind(this);
   }
@@ -121,15 +114,13 @@ export default class CreateCalendar extends React.Component {
 
   render() {
     const { date, scrollCount } = this.state;
-    const { handleMouseOut } = this.context;
 
     const arrayDates = returnCalendarDaysArr(date, scrollCount);
 
-    const scrollUp = scrollCount > 0 ?
-      <i value={'up'} onClick={this.handleScroll}
+    const scrollUp = scrollCount > 0
+      ? <i value="up" onClick={this.handleScroll}
         className="fa-solid fa-chevron-up fa-lg hover:cursor-pointer"></i>
-        :
-      null;
+      : null;
 
     return (
       <>
@@ -143,11 +134,11 @@ export default class CreateCalendar extends React.Component {
         <CalendarLabelYear arrayDates={arrayDates} />
       </div>
       <div className='w-full h-8 center-all'>
-          <i value={'down'} onClick={this.handleScroll}
+          <i value="down" onClick={this.handleScroll}
           className="fa-solid fa-chevron-down fa-lg hover:cursor-pointer"></i>
       </div>
       </>
-    )
+    );
   }
 }
 

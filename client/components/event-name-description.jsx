@@ -1,11 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 
 class MeetingDetails extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { handleName, handleDescription, nameVal, descVal } = this.props;
@@ -24,7 +19,7 @@ class MeetingDetails extends React.Component {
           focus:outline-none focus:border focus:border-blue-500'/>
 
       </div>
-    )
+    );
   }
 
 }

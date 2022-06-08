@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import SelectTime from './select-time';
 
 function ChooseTimeLabel() {
@@ -7,15 +6,10 @@ function ChooseTimeLabel() {
     <h3 className='font-nunito-sans font-thin text-lg mb-5'>
       Choose a Time
     </h3>
-  )
+  );
 }
 
-
 export default class ChooseTimeRange extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { handleStartTime, handleEndTime } = this.props;
@@ -29,6 +23,6 @@ export default class ChooseTimeRange extends React.Component {
           <SelectTime getTime={handleEndTime} />
         </div>
       </div>
-    )
+    );
   }
 }

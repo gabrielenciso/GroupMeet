@@ -1,5 +1,5 @@
-var chunk = require('lodash/chunk');
-var flatten = require('lodash/flatten');
+const chunk = require('lodash/chunk');
+// const flatten = require('lodash/flatten');
 
 function returnYearLabels(arrayDates) {
 

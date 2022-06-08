@@ -4,7 +4,7 @@ const pg = require('pg');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const errorMiddleware = require('./error-middleware.js');
-const ClientError = require('./client-error.js')
+const ClientError = require('./client-error.js');
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -39,7 +39,7 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
       res.status(201).json(meeting);
     })
     .catch(err => next(err));
-})
+});
 
 app.post('/api/meetings', (req, res, next) => {
   if (!req.body) {
@@ -59,8 +59,8 @@ app.post('/api/meetings', (req, res, next) => {
       const [meetingDetails] = result.rows;
       res.status(201).json(meetingDetails);
     })
-    .catch(err => next(err))
-})
+    .catch(err => next(err));
+});
 
 app.post('/api/users', (req, res, next) => {
 
@@ -90,19 +90,18 @@ app.post('/api/users', (req, res, next) => {
       db.query(sql, params)
         .then(result => {
           const [user] = result.rows;
-          console.log(user);
           const { userId, userName } = user;
-          const payload = { user, userName };
+          const payload = { userId, userName };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);
 
           res.status(201).json({ token, user });
         })
-        .catch(err => next(err))
+        .catch(err => next(err));
 
     })
     .catch(err => next(err));
 
-})
+});
 
 app.use(errorMiddleware);
 

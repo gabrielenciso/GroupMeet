@@ -62,7 +62,7 @@ class GroupMeetingBlocks extends React.Component {
       const row = [];
       for (let j = 0; j < days.length; j++) {
         const block = (
-          <div time={times[i]} date={days[j]} key={j}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i}
             className='h-3 w-14 bg-gray-100 mr-0.5'></div>
         );
         row.push(block);
@@ -130,7 +130,22 @@ class GroupMeetingBlocks extends React.Component {
 
 class UserMeetingBlocks extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+  }
+
+  handleMouseDown(event) {
+    console.log(event.target);
+  }
+
   render() {
+    const { handleMouseDown } = this;
+
     const { dates, startTime, endTime } = this.props;
     if (dates.length === 0) return;
 
@@ -142,7 +157,7 @@ class UserMeetingBlocks extends React.Component {
       const row = [];
       for (let j = 0; j < days.length; j++) {
         const block = (
-          <div time={times[i]} date={days[j]} key={j}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} onMouseDown={handleMouseDown}
             className='h-3 w-14 bg-gray-300 mr-0.5'></div>
         );
         row.push(block);

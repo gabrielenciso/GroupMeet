@@ -1,4 +1,5 @@
 import React from 'react';
+import jwtDecode from 'jwt-decode';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js'
@@ -10,7 +11,7 @@ function MeetingTitle(props) {
       <h1 className='font-nunito-sans text-3xl font-thin mt-8'>
         {props.name}
       </h1>
-      <p className='font-nunito-sans text-sm font-thin text-gray-500 mt-5 mb-10'>
+      <p className='font-nunito-sans text-sm font-thin text-gray-500 mt-5 mb-4'>
         {props.description}
       </p>
     </div>
@@ -65,7 +66,7 @@ class GroupMeetingBlocks extends React.Component {
       for (let j = 0; j < days.length; j++) {
         const block = (
           <div time={times[i]} date={days[j]} key={j}
-            className='h-3 w-14 bg-gray-300 mr-0.5'></div>
+            className='h-3 w-14 bg-gray-100 mr-0.5'></div>
         )
         row.push(block);
       }
@@ -101,7 +102,7 @@ class GroupMeetingBlocks extends React.Component {
       const dayArr = day.split(' ');
 
       return (
-        <div key={day} className='text-center font-plus-jakarta-sans'>
+        <div key={day} className='w-14 text-center font-plus-jakarta-sans'>
           <div className='text-xs'>
             { [dayArr[1], dayArr[2]].join(' ') }
           </div>
@@ -114,11 +115,11 @@ class GroupMeetingBlocks extends React.Component {
 
     return(
       <>
-      <div className='flex justify-center'>
-        <div className='flex flex-col justify-between mt-20 mb-10 mr-1'>
+      <div className='flex overflow-x-scroll'>
+        <div className='flex flex-col w-10 justify-between mt-20 mb-10 mx-1'>
           {timeLabels}
         </div>
-        <div className='my-10 w-min flex flex-wrap justify-center'>
+        <div className='my-10 mr-10 w-min flex flex-wrap justify-center'>
             <div className='w-full flex justify-around'>
               {dateLabels}
             </div>
@@ -185,7 +186,7 @@ class UserMeetingBlocks extends React.Component {
       const dayArr = day.split(' ');
 
       return (
-        <div key={day} className='text-center font-plus-jakarta-sans'>
+        <div key={day} className='w-14 text-center font-plus-jakarta-sans'>
           <div className='text-xs'>
             {[dayArr[1], dayArr[2]].join(' ')}
           </div>
@@ -198,7 +199,7 @@ class UserMeetingBlocks extends React.Component {
 
     return (
       <>
-        <div className='flex justify-center'>
+        <div className='flex justify-center overflow-x-scroll'>
           <div className='flex flex-col justify-between mt-20 mb-10 mr-1'>
             {timeLabels}
           </div>
@@ -225,11 +226,14 @@ export default class MeetingEvent extends React.Component {
       startTime: '',
       endTime: '',
       username: '',
-      signIn: false
+      user: null,
+      isAuthorizing: true
     }
 
     this.handleRegistration = this.handleRegistration.bind(this);
     this.handleUserName = this.handleUserName.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
   componentDidMount() {
@@ -250,6 +254,10 @@ export default class MeetingEvent extends React.Component {
         });
       })
       .catch(err => console.error(err));
+
+    const token = window.localStorage.getItem('react-context-jwt');
+    const user = token ? jwtDecode(token) : null;
+    this.setState({ user, isAuthorizing: false });
   }
 
   handleRegistration(event) {
@@ -276,6 +284,7 @@ export default class MeetingEvent extends React.Component {
         if (result.error) {
           alert('username is already taken');
         } else {
+          this.handleSignIn(result);
           this.setState({ signIn: true });
         }
       })
@@ -285,27 +294,50 @@ export default class MeetingEvent extends React.Component {
     this.setState({ username: event.target.value });
   }
 
-  render() {
-    const { name, description, dates, startTime, endTime, signIn } = this.state;
-    const { handleRegistration, handleUserName } = this;
+  handleSignIn(result) {
+    const { user, token } = result;
+    window.localStorage.setItem('react-context-jwt', token);
+    this.setState({ user });
+  }
 
-    const userView = signIn ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime}/>
+  handleSignOut(event) {
+    event.preventDefault();
+    console.log('hello');
+    window.localStorage.removeItem('react-context-jwt');
+    this.setState({ user: null });
+  }
+
+  render() {
+    if (this.state.isAuthorizing) return null;
+
+    const { name, description, dates, startTime, endTime, signIn, user } = this.state;
+    const { handleRegistration, handleUserName, handleSignIn, handleSignOut } = this;
+
+    const signOut = user ?
+    <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
+      className='font-nunito-sans font-light text-blue-500 lg:pl-5' />
     :
-      <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} label={'Register as a participant'} />
+    null;
+
+    const userView = user ?
+    <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime}/>
+    :
+    <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} label={'Register as a participant'} />
     return(
       <>
         <Header />
-        <div className='w-96 m-auto flex flex-wrap
+        <div className='min-w-96 m-auto flex flex-wrap justify-center
                         lg:w-4/5 lg:m-auto lg:mt-5'>
-          <div className='lg:w-1/2 lg:h-116'>
+          <div className='w-96 lg:w-1/2 lg:h-116'>
             <MeetingTitle name={name} description={description} />
+            {signOut}
             {userView}
           </div>
-          <div className='w-full lg:w-1/2 text-center'>
-            <h1 className='font-nunito-sans text-xl font-thin mt-10'>
+          <div className='w-full lg:w-1/2 text-center flex flex-wrap justify-center'>
+            <h1 className='font-nunito-sans text-xl font-thin mt-10 w-full'>
               Group's Availability
             </h1>
-            <h3 className='font-nunito-sans mt-4 mb-10'>
+            <h3 className='font-nunito-sans mt-4 mb-10 w-full'>
               0 registered
             </h3>
             <GroupMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} />

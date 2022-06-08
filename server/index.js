@@ -2,6 +2,7 @@ require('dotenv/config');
 const path = require('path');
 const pg = require('pg');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const errorMiddleware = require('./error-middleware.js');
 const ClientError = require('./client-error.js')
 
@@ -89,7 +90,12 @@ app.post('/api/users', (req, res, next) => {
       db.query(sql, params)
         .then(result => {
           const [user] = result.rows;
-          res.status(201).json(user);
+          console.log(user);
+          const { userId, userName } = user;
+          const payload = { user, userName };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+
+          res.status(201).json({ token, user });
         })
         .catch(err => next(err))
 

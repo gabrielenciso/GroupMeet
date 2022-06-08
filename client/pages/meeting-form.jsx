@@ -40,7 +40,6 @@ export default class MeetingForm extends React.Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
-    // this.handleDeselectDays = this.handleDeselectDays.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -105,24 +104,7 @@ export default class MeetingForm extends React.Component {
         }
       });
     }
-    // if (this.state.selecting) {
-    //   this.setState({ daysSelected: [...this.state.daysSelected, selectedVal] })
-    // } else {
-    //   if (!days.includes(selectedVal)) return
-
-    //   days.splice(days.indexOf(selectedVal), 1);
-    //   this.setState({ daysSelected: days });
-    // }
   }
-
-  // handleDeselectDays(event) {
-  //   const selectedVal = event.target.getAttribute('value');
-  //   const days = this.state.daysSelected.slice();
-
-
-  //   console.log('out');
-  //   console.log(event.target);
-  // }
 
   handleMouseDown(event) {
     this.setState({ toggle: true });

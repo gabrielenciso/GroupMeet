@@ -22,17 +22,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-// app.get('/api/hello', (req, res) => {
-//   res.json({ hello: 'world' });
-// });
-
-// app.get('api/meeting/:')
-// get app.get request to make the table for the meeting page
-
 app.get('/api/meetings/:meetingId', (req, res, next) => {
   const { meetingId } = req.params;
 
-  // ("name", "description", "dates", "startTime", "endTime", "selectedBlocks")
   const sql = `
   SELECT "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
   FROM "meetings"
@@ -43,7 +35,6 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const [meeting] = result.rows;
-      console.log(meeting);
       res.status(201).json(meeting);
     })
     .catch(err => next(err));
@@ -68,6 +59,55 @@ app.post('/api/meetings', (req, res, next) => {
       res.status(201).json(meetingDetails);
     })
     .catch(err => next(err))
+})
+
+app.post('/api/users', (req, res, next) => {
+
+  const { username, meetingId } = req.body;
+  const params = [username, meetingId];
+
+  const checkSQL = `
+  select *
+  from "users"
+  where "userName" = $1
+  and "meetingId" = $2
+  `;
+
+  db.query(checkSQL, params)
+    .then(result => {
+
+      if (result.rows[0]) {
+        throw new ClientError(409, 'username is already taken');
+      }
+
+      const sql = `
+      insert into "users" ("userName", "meetingId")
+      values ($1, $2)
+      returning *
+      `;
+
+      db.query(sql, params)
+        .then(result => {
+          const [user] = result.rows;
+          res.status(201).json(user);
+        })
+        .catch(err => next(err))
+
+    })
+    .catch(err => next(err));
+
+  // const sql = `
+  // insert into "users" ("userName", "meetingId")
+  // values ($1, $2)
+  // returning *
+  // `;
+
+  // db.query(sql, params)
+  //   .then(result => {
+  //     const [user] = result.rows;
+  //     res.status(201).json(user);
+  //   })
+  //   .catch(err => next(err))
 })
 
 app.use(errorMiddleware);

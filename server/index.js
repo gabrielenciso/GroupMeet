@@ -69,9 +69,9 @@ app.post('/api/users', (req, res, next) => {
 
   const checkSQL = `
   select *
-  from "users"
-  where "userName" = $1
-  and "meetingId" = $2
+    from "users"
+    where "userName" = $1
+    and "meetingId" = $2
   `;
 
   db.query(checkSQL, params)
@@ -83,7 +83,7 @@ app.post('/api/users', (req, res, next) => {
 
       const sql = `
       insert into "users" ("userName", "meetingId")
-      values ($1, $2)
+        values ($1, $2)
       returning *
       `;
 
@@ -98,6 +98,29 @@ app.post('/api/users', (req, res, next) => {
         })
         .catch(err => next(err));
 
+    })
+    .catch(err => next(err));
+
+});
+
+app.post('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+  const { meetingId, blocks } = req.body;
+
+  const sql = `
+  update "users"
+    set "selectedTimes" = $1
+  where "userId" = $2
+  and "meetingId" = $3
+  returning *
+  `;
+
+  const params = [blocks, userId, meetingId];
+  db.query(sql, params)
+    .then(result => {
+
+      const [user] = result.rows;
+      res.status(201).json(user);
     })
     .catch(err => next(err));
 

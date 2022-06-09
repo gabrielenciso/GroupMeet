@@ -8,7 +8,47 @@ function fillSelectSquare(initial, current) {
   currCol = parseInt(currCol);
 
   const fill = [];
-  if (initRow > currRow || initCol > currCol) {
+  if (initRow > currRow && initCol > currCol) {
+    for (let i = initRow; i >= currRow; i--) {
+      for (let j = initCol; j >= currCol; j--) {
+        const block = {
+          row: i.toString(),
+          col: j.toString()
+        };
+        fill.push(block);
+      }
+    }
+  } else if (initRow < currRow && initCol < currCol) {
+    for (let i = initRow; i < currRow + 1; i++) {
+      for (let j = initCol; j < currCol + 1; j++) {
+        const block = {
+          row: i.toString(),
+          col: j.toString()
+        };
+        fill.push(block);
+      }
+    }
+  } else if (initRow < currRow && initCol > currCol) {
+    for (let i = initRow; i < currRow + 1; i++) {
+      for (let j = initCol; j >= currCol; j--) {
+        const block = {
+          row: i.toString(),
+          col: j.toString()
+        };
+        fill.push(block);
+      }
+    }
+  } else if (initRow > currRow && initCol < currCol) {
+    for (let i = initRow; i >= currRow; i--) {
+      for (let j = initCol; j < currCol + 1; j++) {
+        const block = {
+          row: i.toString(),
+          col: j.toString()
+        };
+        fill.push(block);
+      }
+    }
+  } else if (initRow > currRow || initCol > currCol) {
     for (let i = initRow; i >= currRow; i--) {
       for (let j = initCol; j >= currCol; j--) {
         const block = {
@@ -36,12 +76,12 @@ export default fillSelectSquare;
 
 // const init = {
 //   col: '5',
-//   row: '5'
+//   row: '0'
 // }
 
 // const curr = {
 //   col: '0',
-//   row: '0'
+//   row: '5'
 // }
 
 // console.log(fillSelectSquare(init, curr));

@@ -4,7 +4,7 @@ import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js';
 import fillSelectSquare from '../lib/fillSelectSquare.js';
-const isEqual = require('lodash/isEqual');
+// const isEqual = require('lodash/isEqual');
 const some = require('lodash/some');
 
 function MeetingTitle(props) {
@@ -151,9 +151,30 @@ class UserMeetingBlocks extends React.Component {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
   }
 
+  componentDidUpdate() {
+    // do fetch post request to send the state array to user id in meeting
+    const { route, user } = this.props;
+    const { blocks } = this.state;
+    const meetingId = route.params.get('meetingId');
+    const userId = user.userId;
+
+    const body = { meetingId, blocks };
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    };
+
+    fetch(`/api/users/${userId}`, req)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
   handleMouseDown(event) {
     this.setState({
-       toggle: true
+      toggle: true
     });
 
     const col = event.target.getAttribute('col');
@@ -164,7 +185,7 @@ class UserMeetingBlocks extends React.Component {
     this.setState(prevState => ({
       fill: {
         ...prevState.fill,
-      init: block
+        init: block
       }
     }));
 
@@ -200,14 +221,14 @@ class UserMeetingBlocks extends React.Component {
     const row = event.target.getAttribute('row');
     const block = { col, row };
     const { selected } = this.state.blocks;
-    const { previous } = this.state;
 
-    if (this.state.selecting && some(selected, block)) return //block already selected
+    if (this.state.selecting && some(selected, block)) return; // block already selected
 
     const { init } = this.state.fill;
-    let fill = fillSelectSquare(init, block).filter(val => !some(selected, val));
+    let fill = [];
     if (this.state.selecting) {
 
+      fill = fillSelectSquare(init, block).filter(val => !some(selected, val));
       this.setState({
         blocks: {
           selected: [...this.state.blocks.selected, ...fill]
@@ -216,25 +237,9 @@ class UserMeetingBlocks extends React.Component {
     } else if (!this.state.selecting) {
       if (!some(selected, block)) return;
 
-      // fill.map(value => {
-
-      //   const removeIndex = selected.findIndex(val => {
-      //     return val.col === value.col && val.row === value.row;
-      //   });
-
-      //   selected.splice(removeIndex, 1);
-      //   this.setState({
-      //     blocks: {
-      //       selected
-      //     }
-      //   });
-      // })
-
+      fill = fillSelectSquare(init, block);
       const removed = selected.filter(val => !some(fill, val));
-      // const removeIndex = selected.findIndex(val => {
-      //   return val.col === block.col && val.row === block.row;
-      // });
-      // selected.splice(removeIndex, 1);
+
       this.setState({
         blocks: {
           selected: removed
@@ -438,7 +443,7 @@ export default class MeetingEvent extends React.Component {
       : null;
 
     const userView = user
-      ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime}/>
+      ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} />
       : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} label="Register as a participant" />;
     return (
       <>

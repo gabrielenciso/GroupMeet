@@ -118,6 +118,7 @@ app.post('/api/users/:userId', (req, res, next) => {
   const params = [blocks, userId, meetingId];
   db.query(sql, params)
     .then(result => {
+
       const [user] = result.rows;
       res.status(201).json(user);
     })

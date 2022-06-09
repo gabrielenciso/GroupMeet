@@ -4,7 +4,6 @@ import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js';
 import fillSelectSquare from '../lib/fillSelectSquare.js';
-// const isEqual = require('lodash/isEqual');
 const some = require('lodash/some');
 
 function MeetingTitle(props) {
@@ -152,7 +151,6 @@ class UserMeetingBlocks extends React.Component {
   }
 
   componentDidUpdate() {
-    // do fetch post request to send the state array to user id in meeting
     const { route, user } = this.props;
     const { blocks } = this.state;
     const meetingId = route.params.get('meetingId');
@@ -222,7 +220,7 @@ class UserMeetingBlocks extends React.Component {
     const block = { col, row };
     const { selected } = this.state.blocks;
 
-    if (this.state.selecting && some(selected, block)) return; // block already selected
+    if (this.state.selecting && some(selected, block)) return;
 
     const { init } = this.state.fill;
     let fill = [];

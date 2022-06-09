@@ -73,15 +73,3 @@ function fillSelectSquare(initial, current) {
 }
 
 export default fillSelectSquare;
-
-// const init = {
-//   col: '5',
-//   row: '0'
-// }
-
-// const curr = {
-//   col: '0',
-//   row: '5'
-// }
-
-// console.log(fillSelectSquare(init, curr));

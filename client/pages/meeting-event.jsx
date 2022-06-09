@@ -3,7 +3,8 @@ import jwtDecode from 'jwt-decode';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js';
-// const isEqual = require('lodash/isEqual');
+import fillSelectSquare from '../lib/fillSelectSquare.js';
+const isEqual = require('lodash/isEqual');
 const some = require('lodash/some');
 
 function MeetingTitle(props) {
@@ -139,26 +140,40 @@ class UserMeetingBlocks extends React.Component {
         selected: []
       },
       selecting: false,
-      toggle: false
+      toggle: false,
+      fill: {
+        init: null
+      }
     };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
   }
 
   handleMouseDown(event) {
-    this.setState({ toggle: true });
+    this.setState({
+       toggle: true
+    });
 
     const col = event.target.getAttribute('col');
     const row = event.target.getAttribute('row');
     const block = { col, row };
     const { selected } = this.state.blocks;
 
+    this.setState(prevState => ({
+      fill: {
+        ...prevState.fill,
+      init: block
+      }
+    }));
+
     if (!some(selected, block)) {
       this.setState({
         blocks: {
           selected: [...this.state.blocks.selected, block]
-        }
+        },
+        selecting: true
       });
     } else {
       const removeIndex = selected.findIndex(val => {
@@ -168,17 +183,68 @@ class UserMeetingBlocks extends React.Component {
       this.setState({
         blocks: {
           selected
-        }
+        },
+        selecting: false
       });
     }
   }
 
   handleMouseUp(event) {
+    this.setState({ toggle: false });
+  }
 
+  handleMouseEnter(event) {
+    if (!this.state.toggle) return;
+
+    const col = event.target.getAttribute('col');
+    const row = event.target.getAttribute('row');
+    const block = { col, row };
+    const { selected } = this.state.blocks;
+    const { previous } = this.state;
+
+    if (this.state.selecting && some(selected, block)) return //block already selected
+
+    const { init } = this.state.fill;
+    let fill = fillSelectSquare(init, block).filter(val => !some(selected, val));
+    if (this.state.selecting) {
+
+      this.setState({
+        blocks: {
+          selected: [...this.state.blocks.selected, ...fill]
+        }
+      });
+    } else if (!this.state.selecting) {
+      if (!some(selected, block)) return;
+
+      // fill.map(value => {
+
+      //   const removeIndex = selected.findIndex(val => {
+      //     return val.col === value.col && val.row === value.row;
+      //   });
+
+      //   selected.splice(removeIndex, 1);
+      //   this.setState({
+      //     blocks: {
+      //       selected
+      //     }
+      //   });
+      // })
+
+      const removed = selected.filter(val => !some(fill, val));
+      // const removeIndex = selected.findIndex(val => {
+      //   return val.col === block.col && val.row === block.row;
+      // });
+      // selected.splice(removeIndex, 1);
+      this.setState({
+        blocks: {
+          selected: removed
+        }
+      });
+    }
   }
 
   render() {
-    const { handleMouseDown, handleMouseUp } = this;
+    const { handleMouseDown, handleMouseUp, handleMouseEnter } = this;
     const { selected } = this.state.blocks;
 
     const { dates, startTime, endTime } = this.props;
@@ -203,7 +269,7 @@ class UserMeetingBlocks extends React.Component {
         }
 
         const block = (
-          <div key={j} time={times[i]} date={days[j]} col={j} row={i} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseEnter={handleMouseEnter}
             className={`h-3 w-14 ${color} mr-0.5`}></div>
         );
         row.push(block);
@@ -255,7 +321,7 @@ class UserMeetingBlocks extends React.Component {
 
     return (
       <>
-        <div className='flex justify-center overflow-x-scroll'>
+        <div className='flex justify-center overflow-x-scroll select-none'>
           <div className='flex flex-col justify-between mt-20 mb-10 mr-1'>
             {timeLabels}
           </div>

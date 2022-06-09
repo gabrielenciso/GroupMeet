@@ -3,6 +3,8 @@ import jwtDecode from 'jwt-decode';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js';
+// const isEqual = require('lodash/isEqual');
+const some = require('lodash/some');
 
 function MeetingTitle(props) {
   return (
@@ -145,16 +147,30 @@ class UserMeetingBlocks extends React.Component {
   }
 
   handleMouseDown(event) {
+    this.setState({ toggle: true });
+
     const col = event.target.getAttribute('col');
     const row = event.target.getAttribute('row');
     const block = { col, row };
+    const { selected } = this.state.blocks;
 
-    this.setState({
-      toggle: true,
-      blocks: {
-        selected: [...this.state.blocks.selected, block]
-      }
-    });
+    if (!some(selected, block)) {
+      this.setState({
+        blocks: {
+          selected: [...this.state.blocks.selected, block]
+        }
+      });
+    } else {
+      const removeIndex = selected.findIndex(val => {
+        return val.col === block.col && val.row === block.row;
+      });
+      selected.splice(removeIndex, 1);
+      this.setState({
+        blocks: {
+          selected
+        }
+      });
+    }
   }
 
   handleMouseUp(event) {

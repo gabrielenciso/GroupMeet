@@ -64,8 +64,8 @@ app.post('/api/meetings', (req, res, next) => {
 
 app.post('/api/users', (req, res, next) => {
 
-  const { username, meetingId } = req.body;
-  const params = [username, meetingId];
+  const { username, meetingId, blocks } = req.body;
+  const params1 = [username, meetingId];
 
   const checkSQL = `
   select *
@@ -74,7 +74,7 @@ app.post('/api/users', (req, res, next) => {
     and "meetingId" = $2
   `;
 
-  db.query(checkSQL, params)
+  db.query(checkSQL, params1)
     .then(result => {
 
       if (result.rows[0]) {
@@ -82,12 +82,13 @@ app.post('/api/users', (req, res, next) => {
       }
 
       const sql = `
-      insert into "users" ("userName", "meetingId")
-        values ($1, $2)
+      insert into "users" ("userName", "meetingId", "selectedTimes")
+        values ($1, $2, $3)
       returning *
       `;
 
-      db.query(sql, params)
+      const params2 = [username, meetingId, blocks];
+      db.query(sql, params2)
         .then(result => {
           const [user] = result.rows;
           const { userId, userName } = user;
@@ -124,6 +125,28 @@ app.post('/api/users/:userId', (req, res, next) => {
     })
     .catch(err => next(err));
 
+});
+
+app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
+  const { userId, meetingId } = req.params;
+
+  const sql = `
+  select "selectedTimes"
+  from "users"
+  where "userId" = $1
+  and "meetingId" = $2
+  `;
+  const params = [userId, meetingId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result) {
+        throw new ClientError(401, 'user not found');
+      }
+
+      const [selectedTimes] = result.rows;
+      res.status(201).json(selectedTimes);
+    })
+    .catch(err => next(err));
 });
 
 app.use(errorMiddleware);

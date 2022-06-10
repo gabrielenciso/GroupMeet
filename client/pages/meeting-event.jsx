@@ -142,12 +142,31 @@ class UserMeetingBlocks extends React.Component {
       toggle: false,
       fill: {
         init: null
-      }
+      },
+      isAuthorizing: true
     };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
+  }
+
+  componentDidMount() {
+    const { route, user } = this.props;
+    const meetingId = route.params.get('meetingId');
+    const userId = user.userId;
+
+    fetch(`/api/users/${userId}/meetingId/${meetingId}`)
+      .then(res => res.json())
+      .then(user => {
+        const { selectedTimes } = user;
+        this.setState({
+          blocks: selectedTimes
+        });
+      })
+      .catch(err => console.error(err));
+
+    this.setState({ isAuthorizing: false });
   }
 
   componentDidUpdate() {
@@ -247,7 +266,10 @@ class UserMeetingBlocks extends React.Component {
   }
 
   render() {
+    if (!this.state.blocks.selected) return null;
+
     const { handleMouseDown, handleMouseUp, handleMouseEnter } = this;
+
     const { selected } = this.state.blocks;
 
     const { dates, startTime, endTime } = this.props;
@@ -391,7 +413,10 @@ export default class MeetingEvent extends React.Component {
     const { username } = this.state;
     const { route } = this.props;
     const meetingId = route.params.get('meetingId');
-    const body = { username, meetingId };
+    const blocks = {
+      selected: []
+    };
+    const body = { username, meetingId, blocks };
     const req = {
       method: 'POST',
       headers: {

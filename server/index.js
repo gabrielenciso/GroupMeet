@@ -45,15 +45,15 @@ app.post('/api/meetings', (req, res, next) => {
   if (!req.body) {
     throw new ClientError(401, 'invalid meeting details');
   }
-  const { name, description, daysSelected: dates, startTime, endTime } = req.body;
+  const { name, description, daysSelected: dates, startTime, endTime, selectedBlocks } = req.body;
 
   const sql = `
-  insert into "meetings" ("name", "description", "dates", "startTime", "endTime")
-  values ($1, $2, $3, $4, $5)
+  insert into "meetings" ("name", "description", "dates", "startTime", "endTime", "selectedBlocks")
+  values ($1, $2, $3, $4, $5, $6)
   returning *
   `;
 
-  const params = [name, description, dates, startTime, endTime];
+  const params = [name, description, dates, startTime, endTime, selectedBlocks];
   db.query(sql, params)
     .then(result => {
       const [meetingDetails] = result.rows;
@@ -104,9 +104,9 @@ app.post('/api/users', (req, res, next) => {
 
 });
 
-app.post('/api/users/:userId', (req, res, next) => {
-  const { userId } = req.params;
-  const { meetingId, blocks } = req.body;
+app.post('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
+  const { userId, meetingId } = req.params;
+  const { blocks, group } = req.body;
 
   const sql = `
   update "users"
@@ -115,16 +115,29 @@ app.post('/api/users/:userId', (req, res, next) => {
   and "meetingId" = $3
   returning *
   `;
-
   const params = [blocks, userId, meetingId];
   db.query(sql, params)
     .then(result => {
 
       const [user] = result.rows;
-      res.status(201).json(user);
+      res.status(201);
     })
     .catch(err => next(err));
 
+  const sql2 = `
+  update "meetings"
+    set "selectedBlocks" = $1
+  where "meetingId" = $2
+  returning *
+  `;
+  const params2 = [group, meetingId];
+  db.query(sql2, params2)
+    .then(result => {
+
+      const [meetingDetails] = result.rows;
+      res.status(201);
+    })
+    .catch(err => next(err));
 });
 
 app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {

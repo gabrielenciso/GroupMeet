@@ -4,6 +4,8 @@ import MeetingDetails from '../components/event-name-description';
 import SelectWeekMonth from '../components/select-week-month';
 import ChooseTimeRange from '../components/choose-time-range';
 import Button from '../components/button';
+import returnTimesArr from '../lib/returnTimesArr';
+import returnEmptyBlocks from '../lib/returnEmptyBlocks';
 
 export default class MeetingForm extends React.Component {
 
@@ -146,7 +148,10 @@ export default class MeetingForm extends React.Component {
       return date1 - date2;
     });
 
-    const body = { name, description, daysSelected, startTime, endTime };
+    const times = returnTimesArr(startTime, endTime);
+    const selectedBlocks = returnEmptyBlocks(times, daysSelected);
+
+    const body = { name, description, daysSelected, startTime, endTime, selectedBlocks };
     const req = {
       method: 'POST',
       headers: {
@@ -158,6 +163,7 @@ export default class MeetingForm extends React.Component {
     fetch('/api/meetings', req)
       .then(res => res.json())
       .then(result => {
+        console.log(result);
         const meetingId = result.meetingId;
         window.location.hash = `meetings?meetingId=${meetingId}`;
       })

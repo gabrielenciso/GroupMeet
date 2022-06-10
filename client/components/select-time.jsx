@@ -23,7 +23,7 @@ export default class SelectTime extends React.Component {
             <option value="12">12</option>
           </select>
           <span className="text-xl mr-3">:</span>
-          <select disabled="true" name="minute" onChange={getTime}
+          <select disabled={true} name="minute" onChange={getTime}
           className="bg-transparent text-xl appearance-none outline-none mr-4 font-light">
             <option value="0">00</option>
             <option value="30">30</option>

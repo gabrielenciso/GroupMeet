@@ -104,9 +104,9 @@ app.post('/api/users', (req, res, next) => {
 
 });
 
-app.post('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
-  const { userId, meetingId } = req.params;
-  const { blocks, group } = req.body;
+app.post('/api/users/:userId', (req, res, next) => {
+  const { userId } = req.params;
+  const { meetingId, blocks, group } = req.body;
 
   const sql = `
   update "users"
@@ -118,9 +118,8 @@ app.post('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
   const params = [blocks, userId, meetingId];
   db.query(sql, params)
     .then(result => {
-
       const [user] = result.rows;
-      res.status(201);
+      res.status(201).json(user);
     })
     .catch(err => next(err));
 
@@ -134,7 +133,7 @@ app.post('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
   db.query(sql2, params2)
     .then(result => {
 
-      const [meetingDetails] = result.rows;
+      // const [meetingDetails] = result.rows;
       res.status(201);
     })
     .catch(err => next(err));

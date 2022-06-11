@@ -67,13 +67,6 @@ export default class UserMeetingBlocks extends React.Component {
       // .then(result => console.log(result)) /// can send stuff
       .catch(err => console.error(err));
 
-    // get the current group blocks from props -- check
-    // take the user blocks and group blocks and put both in  function
-    // in the function go through user blocks and match the row x col
-    // to corresponding group blocks index --> group blocks hs to be made as a
-    // matrix in json blocks: { blocks: [[],[]] }
-    // output matrix with count in each matrix point
-    // make a fetch request to the group meetingId to send over data to the group blocks
     // style group blocks component to go through each row x col and see the count it has
     // take a max value and assign that to darkest color
     //

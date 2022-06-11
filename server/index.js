@@ -116,27 +116,42 @@ app.post('/api/users/:userId', (req, res, next) => {
   returning *
   `;
   const params = [blocks, userId, meetingId];
+
   db.query(sql, params)
     .then(result => {
       const [user] = result.rows;
-      res.status(201).json(user);
+
+      const sql2 = `
+      update "meetings"
+        set "selectedBlocks" = $1
+      where "meetingId" = $2
+      returning *
+      `;
+      const params2 = [group, meetingId];
+      db.query(sql2, params2)
+        .then(result => {
+          const [meetingDetails] = result.rows;
+
+          res.status(201).json(meetingDetails);
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 
-  const sql2 = `
-  update "meetings"
-    set "selectedBlocks" = $1
-  where "meetingId" = $2
-  returning *
-  `;
-  const params2 = [group, meetingId];
-  db.query(sql2, params2)
-    .then(result => {
+  // const sql2 = `
+  // update "meetings"
+  //   set "selectedBlocks" = $1
+  // where "meetingId" = $2
+  // returning *
+  // `;
+  // const params2 = [group, meetingId];
+  // db.query(sql2, params2)
+  //   .then(result => {
 
-      // const [meetingDetails] = result.rows;
-      res.status(201);
-    })
-    .catch(err => next(err));
+  //     // const [meetingDetails] = result.rows;
+  //     res.status(201);
+  //   })
+  //   .catch(err => next(err));
 });
 
 app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {

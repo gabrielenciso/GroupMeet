@@ -4,7 +4,7 @@ import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
 import UserMeetingBlocks from '../components/user-meeting-blocks.jsx';
 import returnTimesArr from '../lib/returnTimesArr.js';
-
+import { io } from 'socket.io-client';
 
 function MeetingTitle(props) {
   return (
@@ -59,33 +59,49 @@ class GroupMeetingBlocks extends React.Component {
         selected: []
       },
       isAuthorizing: true
-    }
+    };
   }
 
+  // turn on socket here
   componentDidMount() {
     const { route } = this.props;
     const meetingId = route.params.get('meetingId');
 
+    const socket = io('/meetings', {
+      query: {
+        meetingId
+      }
+    });
+
     fetch(`/api/meetings/${meetingId}`)
       .then(res => res.json())
       .then(result => {
-        console.log(result);
+
         const blocks = result.selectedBlocks.blocks;
         this.setState({
           groupBlocks: {
             selected: blocks
           }
-        })
+        });
       })
       .catch(err => console.error(err));
-      this.setState({ isAuthorizing: false });
-  }
 
+    socket.on('update', meeting => {
+      const blocks = meeting.selectedBlocks.blocks;
+      this.setState({
+        groupBlocks: {
+          selected: blocks
+        }
+      });
+    });
+
+    this.setState({ isAuthorizing: false });
+  }
 
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { dates, startTime, endTime, user } = this.props;
+    const { dates, startTime, endTime } = this.props;
     if (dates.length === 0) return;
 
     const days = JSON.parse(dates).days;
@@ -103,23 +119,11 @@ class GroupMeetingBlocks extends React.Component {
         }
       }
     }
-    console.log(largestArrLength);
 
     const rows = [];
     for (let i = 0; i < times.length - 1; i++) {
       const row = [];
       for (let j = 0; j < days.length; j++) {
-        // go through the state array and see the values for each one,
-        // should correspond to the i and j ==> assign the array elements to a users attribute
-        // at i and j of the state matrix, get the length property
-        // with length property, get the max value to divide opacities
-        // set the opacity color depending on max value and the current value
-
-        // const color = returnColorOpacity(largestArrLength, selected[i][j]);
-        // const color = selected[i][j].length > 0 ? 'bg-green-500' : 'bg-gray-100'; // error here ----->>>>>
-
-        // let opactiyVal = (1 / largestArrLength) * selected[i][j];
-        // opactiy-[${opactiyVal.toFixed(2)}]
 
         let color = 'bg-gray-100';
         let opacityVal = 1;
@@ -127,14 +131,11 @@ class GroupMeetingBlocks extends React.Component {
           color = 'bg-green-500';
           opacityVal = ((1 / largestArrLength) * selected[i][j].length).toFixed(2);
         }
-        // tailwind opacity arbitrary values dont work for some values,
-        // do some css inline styling probably with opactiy value
-        // may have to do inline styling
 
         const users = selected[i][j].join(',');
         const block = (
           <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users}
-            className={`h-3 w-14 mr-0.5 ${color}`} style={{opacity: opacityVal}}></div>
+            className={`h-3 w-14 mr-0.5 ${color}`} style={{ opacity: opacityVal }}></div>
         );
         row.push(block);
       }

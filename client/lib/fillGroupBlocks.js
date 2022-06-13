@@ -18,11 +18,6 @@ function fillGroupBlocks(userId, userBlocks, groupBlocks) {
 
     fillBlocks[row][col].push(userId);
 
-    // if (fillBlocks[row][col].includes(userId)) {
-    //   continue;
-    // } else {
-    //   fillBlocks[row][col].push(userId);
-    // }
   }
 
   return fillBlocks;

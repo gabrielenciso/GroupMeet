@@ -67,12 +67,6 @@ class GroupMeetingBlocks extends React.Component {
     const { route } = this.props;
     const meetingId = route.params.get('meetingId');
 
-    const socket = io('/meetings', {
-      query: {
-        meetingId
-      }
-    });
-
     fetch(`/api/meetings/${meetingId}`)
       .then(res => res.json())
       .then(result => {
@@ -86,8 +80,15 @@ class GroupMeetingBlocks extends React.Component {
       })
       .catch(err => console.error(err));
 
+    const socket = io('/meetings', {
+      query: {
+        meetingId
+      }
+    });
+
     socket.on('update', meeting => {
       const blocks = meeting.selectedBlocks.blocks;
+      console.log(meeting);
       this.setState({
         groupBlocks: {
           selected: blocks

@@ -3,6 +3,7 @@ import returnTimesArr from '../lib/returnTimesArr';
 import fillSelectSquare from '../lib/fillSelectSquare';
 import fillGroupBlocks from '../lib/fillGroupBlocks';
 const some = require('lodash/some');
+import { io } from 'socket.io-client';
 
 export default class UserMeetingBlocks extends React.Component {
 
@@ -64,30 +65,23 @@ export default class UserMeetingBlocks extends React.Component {
 
     fetch(`/api/users/${userId}`, req)
       .then(res => res.json())
-      // .then(result => console.log(result)) /// can send stuff
       .catch(err => console.error(err));
 
-    // style group blocks component to go through each row x col and see the count it has
-    // take a max value and assign that to darkest color
-    //
   }
 
   handleMouseDown(event) {
-    this.setState({
-      toggle: true
-    });
 
     const col = event.target.getAttribute('col');
     const row = event.target.getAttribute('row');
     const block = { col, row };
     const { selected } = this.state.blocks;
 
-    this.setState(prevState => ({
+    this.setState({
+      toggle: true,
       fill: {
-        ...prevState.fill,
         init: block
       }
-    }));
+    });
 
     if (!some(selected, block)) {
       this.setState({
@@ -138,11 +132,11 @@ export default class UserMeetingBlocks extends React.Component {
       if (!some(selected, block)) return;
 
       fill = fillSelectSquare(init, block);
-      const removed = selected.filter(val => !some(fill, val));
+      const filtered = selected.filter(val => !some(fill, val));
 
       this.setState({
         blocks: {
-          selected: removed
+          selected: filtered
         }
       });
     }

@@ -5,8 +5,13 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const errorMiddleware = require('./error-middleware.js');
 const ClientError = require('./client-error.js');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
+
+const http = require('http');
+const { Server: IO } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new IO(server);
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -15,7 +20,7 @@ const db = new pg.Pool({
   }
 });
 
-const app = express();
+
 const publicPath = path.join(__dirname, 'public');
 
 if (process.env.NODE_ENV === 'development') {
@@ -25,8 +30,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-const server = createServer(app);
-const io = new Server(server);
 
 const meetings = io.of('/meetings');
 meetings.on('connection', socket => {
@@ -34,6 +37,8 @@ meetings.on('connection', socket => {
     socket.disconnect();
     return;
   }
+
+  console.log('hello?');
   const { meetingId } = socket.handshake.query;
   socket.join(meetingId);
 });
@@ -53,7 +58,7 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
       const [meeting] = result.rows;
       res.status(201).json(meeting);
 
-      io.to(meetingId).emit('update', meeting);
+      meetings.to(meetingId).emit('update', meeting);
     })
     .catch(err => next(err));
 });
@@ -136,7 +141,6 @@ app.post('/api/users/:userId', (req, res, next) => {
 
   db.query(sql, params)
     .then(result => {
-      // const [user] = result.rows;
 
       const sql2 = `
       update "meetings"
@@ -181,6 +185,6 @@ app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
 
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });

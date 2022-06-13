@@ -30,9 +30,6 @@ function returnTimesArr(startTime, endTime) {
       }
     }
 
-    // if (startHour === endHour && startMin === endMin) {
-    //   break;
-    // }
   }
 
   return array;

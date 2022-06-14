@@ -35,18 +35,4 @@ function returnTimesArr(startTime, endTime) {
   return array;
 }
 
-// const startTime = {
-//   hour: '10',
-//   minute: '0',
-//   ampm: 'AM'
-// };
-
-// const endTime = {
-//   hour: '5',
-//   minute: '00',
-//   ampm: 'PM'
-// }
-// const times = returnTimesArr(startTime, endTime);
-// console.log(times);
-
 export default returnTimesArr;

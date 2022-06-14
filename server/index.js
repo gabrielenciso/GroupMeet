@@ -40,8 +40,6 @@ meetings.on('connection', socket => {
 
   socket.join(meetingId);
 
-  const hello = 'is this working';
-  meetings.to(meetingId).emit('update', hello);
 });
 
 app.get('/api/meetings/:meetingId', (req, res, next) => {
@@ -59,7 +57,6 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
       const [meeting] = result.rows;
       res.status(201).json(meeting);
 
-      // io.to(meetingId).emit('update', meeting);
     })
     .catch(err => next(err));
 });
@@ -181,7 +178,7 @@ app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
       }
 
       const [selectedTimes] = result.rows;
-      res.status(201).json(selectedTimes);
+      res.status(200).json(selectedTimes);
     })
     .catch(err => next(err));
 });

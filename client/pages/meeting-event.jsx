@@ -60,9 +60,11 @@ class GroupMeetingBlocks extends React.Component {
       },
       isAuthorizing: true
     };
+
+    // this.socket = this.socket.bind(this);
+    // this.componentDidMount.socket = this.componentDidMount.socket.bind()
   }
 
-  // turn on socket here
   componentDidMount() {
     const { route } = this.props;
     const meetingId = route.params.get('meetingId');
@@ -97,15 +99,14 @@ class GroupMeetingBlocks extends React.Component {
         });
       }
 
-      // this.setState({
-      //   groupBlocks: {
-      //     selected: blocks
-      //   }
-      // });
     });
 
     this.setState({ isAuthorizing: false });
   }
+
+  // componentWillUnmount() {
+  //   this.socket.disconnect();
+  // }
 
   render() {
     if (this.state.isAuthorizing) return null;

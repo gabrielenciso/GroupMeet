@@ -2,8 +2,7 @@ import React from 'react';
 import returnTimesArr from '../lib/returnTimesArr';
 import fillSelectSquare from '../lib/fillSelectSquare';
 import fillGroupBlocks from '../lib/fillGroupBlocks';
-const some = require('lodash/some');
-import { io } from 'socket.io-client';
+import some from 'lodash/some';
 
 export default class UserMeetingBlocks extends React.Component {
 

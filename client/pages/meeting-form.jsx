@@ -163,7 +163,6 @@ export default class MeetingForm extends React.Component {
     fetch('/api/meetings', req)
       .then(res => res.json())
       .then(result => {
-        console.log(result);
         const meetingId = result.meetingId;
         window.location.hash = `meetings?meetingId=${meetingId}`;
       })

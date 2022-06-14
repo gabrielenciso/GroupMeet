@@ -1,6 +1,6 @@
 
 function fillGroupBlocks(userId, userBlocks, groupBlocks) {
-  const fillBlocks = groupBlocks.blocks
+  const fillBlocks = groupBlocks.blocks;
 
   for (let i = 0; i < fillBlocks.length; i++) {
     for (let j = 0; j < fillBlocks[i].length; j++) {
@@ -24,37 +24,3 @@ function fillGroupBlocks(userId, userBlocks, groupBlocks) {
 }
 
 export default fillGroupBlocks;
-
-// const userId = 14;
-
-// const userBlocks = {
-//   selected: [
-//     {
-//       row: '0',
-//       col: '0'
-//     },
-//     {
-//       row: '0',
-//       col: '1'
-//     },
-//     {
-//       row: '0',
-//       col: '2'
-//     },
-//     {
-//       row: '0',
-//       col: '3'
-//     }
-//   ]
-// }
-
-// const groupBlocks ={
-//   blocks: [
-//     [[], [], [], [], []],
-//     [[], [], [], [], []],
-//     [[], [], [], [], []],
-//     [[], [], [], [], []]
-//   ]
-// }
-
-// console.log(fillGroupBlocks(userId, userBlocks, groupBlocks));

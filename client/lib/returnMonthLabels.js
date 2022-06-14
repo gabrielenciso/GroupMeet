@@ -43,7 +43,4 @@ function returnMonthLabels(arrayDates) {
   return months;
 }
 
-// const arrayDates = returnCalendarDaysArr(new Date());
-// console.log(returnMonthLabels(arrayDates));
-
 export default returnMonthLabels;

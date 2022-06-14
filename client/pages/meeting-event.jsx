@@ -87,13 +87,21 @@ class GroupMeetingBlocks extends React.Component {
     });
 
     socket.on('update', meeting => {
-      const blocks = meeting.selectedBlocks.blocks;
-      console.log(meeting);
-      this.setState({
-        groupBlocks: {
-          selected: blocks
-        }
-      });
+
+      if (meeting.selectedBlocks) {
+        const blocks = meeting.selectedBlocks.blocks;
+        this.setState({
+          groupBlocks: {
+            selected: blocks
+          }
+        });
+      }
+
+      // this.setState({
+      //   groupBlocks: {
+      //     selected: blocks
+      //   }
+      // });
     });
 
     this.setState({ isAuthorizing: false });
@@ -213,7 +221,10 @@ export default class MeetingEvent extends React.Component {
       endTime: '',
       username: '',
       user: null,
-      isAuthorizing: true
+      isAuthorizing: true,
+      selectedBlocks: {
+        blocks: []
+      }
     };
 
     this.handleRegistration = this.handleRegistration.bind(this);

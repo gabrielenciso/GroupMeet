@@ -7,10 +7,12 @@ function returnEmptyBlocks(times, days) {
     for (let j = 0; j < days.days.length; j++) {
       row.push([]);
     }
-    rows.push(row)
+    rows.push(row);
   }
 
-  return { blocks: rows }
+  return {
+    blocks: rows
+  };
 }
 
 export default returnEmptyBlocks;

@@ -20,7 +20,6 @@ const db = new pg.Pool({
   }
 });
 
-
 const publicPath = path.join(__dirname, 'public');
 
 if (process.env.NODE_ENV === 'development') {
@@ -30,7 +29,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(publicPath));
 app.use(express.json());
 
-
 const meetings = io.of('/meetings');
 meetings.on('connection', socket => {
   if (!socket.handshake.query.meetingId) {
@@ -38,9 +36,12 @@ meetings.on('connection', socket => {
     return;
   }
 
-  console.log('hello?');
   const { meetingId } = socket.handshake.query;
+
   socket.join(meetingId);
+
+  const hello = 'is this working';
+  meetings.to(meetingId).emit('update', hello);
 });
 
 app.get('/api/meetings/:meetingId', (req, res, next) => {
@@ -58,7 +59,7 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
       const [meeting] = result.rows;
       res.status(201).json(meeting);
 
-      meetings.to(meetingId).emit('update', meeting);
+      // io.to(meetingId).emit('update', meeting);
     })
     .catch(err => next(err));
 });
@@ -154,6 +155,8 @@ app.post('/api/users/:userId', (req, res, next) => {
           const [meetingDetails] = result.rows;
 
           res.status(201).json(meetingDetails);
+
+          meetings.to(meetingId).emit('update', meetingDetails);
         })
         .catch(err => next(err));
     })

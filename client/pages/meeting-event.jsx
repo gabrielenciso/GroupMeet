@@ -61,8 +61,13 @@ class GroupMeetingBlocks extends React.Component {
       isAuthorizing: true
     };
 
-    // this.socket = this.socket.bind(this);
-    // this.componentDidMount.socket = this.componentDidMount.socket.bind()
+    const { route } = this.props;
+    const meetingId = route.params.get('meetingId');
+    this.socket = io('/meetings', {
+      query: {
+        meetingId
+      }
+    });
   }
 
   componentDidMount() {
@@ -82,13 +87,7 @@ class GroupMeetingBlocks extends React.Component {
       })
       .catch(err => console.error(err));
 
-    const socket = io('/meetings', {
-      query: {
-        meetingId
-      }
-    });
-
-    socket.on('update', meeting => {
+    this.socket.on('update', meeting => {
 
       if (meeting.selectedBlocks) {
         const blocks = meeting.selectedBlocks.blocks;
@@ -104,9 +103,9 @@ class GroupMeetingBlocks extends React.Component {
     this.setState({ isAuthorizing: false });
   }
 
-  // componentWillUnmount() {
-  //   this.socket.disconnect();
-  // }
+  componentWillUnmount() {
+    this.socket.disconnect();
+  }
 
   render() {
     if (this.state.isAuthorizing) return null;

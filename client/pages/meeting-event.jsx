@@ -257,11 +257,6 @@ export default class MeetingEvent extends React.Component {
     this.setState({ user, isAuthorizing: false });
   }
 
-  // componentWillUnmount() {
-  //   window.localStorage.removeItem('react-context-jwt');
-  //   this.setState({ user: null });
-  // }
-
   handleRegistration(event) {
     event.preventDefault();
 

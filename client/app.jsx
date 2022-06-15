@@ -22,14 +22,16 @@ export default class App extends React.Component {
 
   handleBacktoForm() {
     window.location.hash = '';
+    window.localStorage.removeItem('react-context-jwt');
+    this.setState({ user: null });
   }
 
   renderPage() {
-    const { route } = this.state;
+    const { route, user } = this.state;
     if (route.path === '') {
       return <MeetingForm />;
     } else {
-      return <MeetingEvent route={route}/>;
+      return <MeetingEvent user={user} route={route}/>;
     }
   }
 

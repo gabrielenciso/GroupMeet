@@ -7,8 +7,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      route: parseRoute(window.location.hash)
-
+      route: parseRoute(window.location.hash),
+      user: null
     };
   }
 
@@ -18,6 +18,10 @@ export default class App extends React.Component {
         route: parseRoute(window.location.hash)
       });
     });
+  }
+
+  handleBacktoForm() {
+    window.location.hash = '';
   }
 
   renderPage() {

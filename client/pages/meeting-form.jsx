@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../components/header';
 import MeetingDetails from '../components/event-name-description';
-import SelectWeekMonth from '../components/select-week-month';
+import SelectMonthDates from '../components/select-month-dates';
 import ChooseTimeRange from '../components/choose-time-range';
 import Button from '../components/button';
 import returnTimesArr from '../lib/returnTimesArr';
@@ -27,7 +27,6 @@ export default class MeetingForm extends React.Component {
       daysSelected: {
         days: []
       },
-      view: 'month',
       toggle: false,
       selecting: false
     };
@@ -36,7 +35,6 @@ export default class MeetingForm extends React.Component {
     this.handleDescription = this.handleDescription.bind(this);
     this.handleStartTime = this.handleStartTime.bind(this);
     this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSelectDays = this.handleSelectDays.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -70,15 +68,6 @@ export default class MeetingForm extends React.Component {
         [name]: value
       }
     }));
-  }
-
-  handleSelectChange(event) {
-    this.setState({ view: event.target.value });
-    this.setState({
-      daysSelected: {
-        days: []
-      }
-    });
   }
 
   handleSelectDays(event) {
@@ -170,8 +159,8 @@ export default class MeetingForm extends React.Component {
   }
 
   render() {
-    const { handleName, handleDescription, handleStartTime, handleEndTime, handleSelectChange, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays } = this;
-    const { name, description, daysSelected, view } = this.state;
+    const { handleName, handleDescription, handleStartTime, handleEndTime, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays } = this;
+    const { name, description, daysSelected } = this.state;
 
     return (
       <>
@@ -182,7 +171,7 @@ export default class MeetingForm extends React.Component {
           <div className='flex flex-wrap
                           lg:flex-col lg:flex-wrap lg:items-center lg:h-144'>
             <MeetingDetails handleName={handleName} handleDescription={handleDescription} nameVal={name} descVal={description}/>
-            <SelectWeekMonth handleSelectDays={handleSelectDays} view={view} handleSelectChange={handleSelectChange} handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleMouseOut={handleMouseOut} handleDeselectDays={handleDeselectDays} daysSelected={daysSelected} />
+            <SelectMonthDates handleSelectDays={handleSelectDays} handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleMouseOut={handleMouseOut} handleDeselectDays={handleDeselectDays} daysSelected={daysSelected} />
             <ChooseTimeRange handleStartTime={handleStartTime} handleEndTime={handleEndTime}/>
             <div className='w-full center-all my-20
                             lg:w-96 lg:order-3'>

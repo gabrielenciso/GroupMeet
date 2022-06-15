@@ -6,7 +6,6 @@ function returnCalendarDaysArr(date, scrollCount) {
 
   const dayOfWeekVal = date.getDay();
 
-  // fill back wards
   for (let i = dayOfWeekVal; i >= 0; i--) {
 
     const currDay = new Date(date);
@@ -18,7 +17,6 @@ function returnCalendarDaysArr(date, scrollCount) {
     arr.splice(i, 1, currDay);
   }
 
-  // fill forward
   for (let i = dayOfWeekVal; i < arr.length; i++) {
 
     const currDay = new Date(date);
@@ -34,4 +32,3 @@ function returnCalendarDaysArr(date, scrollCount) {
 }
 
 export default returnCalendarDaysArr;
-// module.exports = returnCalendarDaysArr;

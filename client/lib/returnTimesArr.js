@@ -30,26 +30,9 @@ function returnTimesArr(startTime, endTime) {
       }
     }
 
-    // if (startHour === endHour && startMin === endMin) {
-    //   break;
-    // }
   }
 
   return array;
 }
-
-// const startTime = {
-//   hour: '10',
-//   minute: '0',
-//   ampm: 'AM'
-// };
-
-// const endTime = {
-//   hour: '5',
-//   minute: '00',
-//   ampm: 'PM'
-// }
-// const times = returnTimesArr(startTime, endTime);
-// console.log(times);
 
 export default returnTimesArr;

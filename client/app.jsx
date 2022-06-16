@@ -7,8 +7,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      route: parseRoute(window.location.hash),
-      user: null
+      route: parseRoute(window.location.hash)
     };
   }
 
@@ -20,23 +19,18 @@ export default class App extends React.Component {
     });
   }
 
-  handleBacktoForm() {
-    window.location.hash = '';
-    window.localStorage.removeItem('react-context-jwt');
-    this.setState({ user: null });
-  }
-
   renderPage() {
-    const { route, user } = this.state;
+    const { route } = this.state;
     if (route.path === '') {
       return <MeetingForm />;
     } else {
-      return <MeetingEvent user={user} route={route}/>;
+      return <MeetingEvent route={route}/>;
     }
   }
 
   render() {
-
-    return (this.renderPage());
+    return (
+      this.renderPage()
+    );
   }
 }

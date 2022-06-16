@@ -161,7 +161,6 @@ export default class MeetingForm extends React.Component {
   render() {
     const { handleName, handleDescription, handleStartTime, handleEndTime, handleSelectDays, handleMouseDown, handleMouseUp, handleMouseOut, handleDeselectDays } = this;
     const { name, description, daysSelected } = this.state;
-
     return (
       <>
       <Header />
@@ -184,5 +183,4 @@ export default class MeetingForm extends React.Component {
       </>
     );
   }
-
 }

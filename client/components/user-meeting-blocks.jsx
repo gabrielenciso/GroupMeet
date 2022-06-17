@@ -221,11 +221,11 @@ export default class UserMeetingBlocks extends React.Component {
 
     return (
       <>
-        <div className='flex justify-center overflow-x-scroll select-none'>
-          <div className='flex flex-col justify-between mt-20 mb-10 mr-1'>
+        <div className='flex overflow-x-scroll select-none lg:order-2'>
+          <div className='flex flex-col w-10 justify-between mt-20 mb-10 mx-1'>
             {timeLabels}
           </div>
-          <div className='my-10 w-min flex flex-wrap justify-center'>
+          <div className='my-10 mr-10 w-min flex flex-wrap justify-center'>
             <div className='w-full flex justify-around'>
               {dateLabels}
             </div>

@@ -9,7 +9,7 @@ import { io } from 'socket.io-client';
 function MeetingTitle(props) {
   return (
     <div className='w-full px-ll text-center
-                    lg:w-96 lg:order-1 lg:text-left lg:pl-5'>
+                    lg:pl-10 lg:order-1 lg:text-left'>
       <h1 className='font-nunito-sans text-3xl font-thin mt-8'>
         {props.name}
       </h1>
@@ -257,6 +257,11 @@ export default class MeetingEvent extends React.Component {
     this.setState({ user, isAuthorizing: false });
   }
 
+  componentWillUnmount() {
+    window.localStorage.removeItem('react-context-jwt');
+    this.setState({ user: null });
+  }
+
   handleRegistration(event) {
     event.preventDefault();
 
@@ -312,7 +317,7 @@ export default class MeetingEvent extends React.Component {
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
-      className='font-nunito-sans font-light text-blue-500 lg:pl-5' />
+      className='font-nunito-sans font-light text-blue-500 w-full lg:pl-5 lg:order-3' />
       : null;
 
     const userView = user
@@ -323,7 +328,7 @@ export default class MeetingEvent extends React.Component {
         <Header />
         <div className='min-w-96 m-auto flex flex-wrap justify-center
                         lg:w-4/5 lg:m-auto lg:mt-5'>
-          <div className='w-96 lg:w-1/2 lg:h-116'>
+          <div className='w-96 flex flex-wrap justify-center lg:w-1/2 lg:h-116'>
             <MeetingTitle name={name} description={description} />
             {userView}
             {signOut}

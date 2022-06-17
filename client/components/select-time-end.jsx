@@ -28,7 +28,7 @@ export default class SelectTimeEnd extends React.Component {
             <option value="0">00</option>
             <option value="30">30</option>
           </select>
-          <select name="ampm" onChange={getTime}
+          <select name="ampm" onChange={getTime} defaultValue={{ label: 'PM', value: 'PM' }}
           className="bg-transparent text-xl appearance-none outline-none font-light">
             <option value="AM">AM</option>
             <option selected value="PM">PM</option>

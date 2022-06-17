@@ -4,8 +4,8 @@ import MeetingDetails from '../components/event-name-description';
 import SelectMonthDates from '../components/select-month-dates';
 import ChooseTimeRange from '../components/choose-time-range';
 import Button from '../components/button';
-import returnTimesArr from '../lib/returnTimesArr';
-import returnEmptyBlocks from '../lib/returnEmptyBlocks';
+import returnTimesArr from '../lib/return-times-arr';
+import returnEmptyBlocks from '../lib/return-empty-blocks';
 
 export default class MeetingForm extends React.Component {
 

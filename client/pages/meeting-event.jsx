@@ -325,7 +325,7 @@ export default class MeetingEvent extends React.Component {
       : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} label="Register as a participant" />;
     return (
       <>
-        <Header handleSignOut={handleSignOut} />
+        <Header />
         <div className='min-w-96 m-auto flex flex-wrap justify-center
                         lg:w-4/5 lg:m-auto lg:mt-5'>
           <div className='w-96 flex flex-wrap justify-center lg:w-1/2 lg:h-116'>

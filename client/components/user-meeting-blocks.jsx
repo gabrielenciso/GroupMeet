@@ -1,7 +1,7 @@
 import React from 'react';
-import returnTimesArr from '../lib/returnTimesArr';
-import fillSelectSquare from '../lib/fillSelectSquare';
-import fillGroupBlocks from '../lib/fillGroupBlocks';
+import returnTimesArr from '../lib/return-times-arr';
+import fillSelectSquare from '../lib/fill-select-square';
+import fillGroupBlocks from '../lib/fill-group-blocks';
 import some from 'lodash/some';
 
 export default class UserMeetingBlocks extends React.Component {

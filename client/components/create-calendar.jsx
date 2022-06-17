@@ -1,7 +1,7 @@
 import React from 'react';
-import returnCalendarDaysArr from '../lib/returnCalendarDaysArr.js';
-import returnMonthLabels from '../lib/returnMonthLabels.js';
-import returnYearLabels from '../lib/returnYearLabels.js';
+import returnCalendarDaysArr from '../lib/return-calendar-days-arr.js';
+import returnMonthLabels from '../lib/return-month-labels.js';
+import returnYearLabels from '../lib/return-year-labels.js';
 import SelectingDaysContext from '../lib/selecting-days-context.js';
 
 class CalendarDays extends React.Component {

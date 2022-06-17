@@ -15,14 +15,14 @@ export default class MeetingForm extends React.Component {
       name: '',
       description: '',
       startTime: {
-        hour: '1',
+        hour: '9',
         minute: '0',
         ampm: 'AM'
       },
       endTime: {
-        hour: '1',
+        hour: '5',
         minute: '0',
-        ampm: 'AM'
+        ampm: 'PM'
       },
       daysSelected: {
         days: []
@@ -131,6 +131,12 @@ export default class MeetingForm extends React.Component {
     event.preventDefault();
 
     const { name, description, daysSelected, startTime, endTime } = this.state;
+
+    if (daysSelected.days.length === 0) {
+      alert('please select specific days');
+      return;
+    }
+
     daysSelected.days.sort((a, b) => {
       const date1 = new Date(a);
       const date2 = new Date(b);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class SelectTime extends React.Component {
+export default class SelectTimeStart extends React.Component {
 
   render() {
     const { getTime } = this.props;
@@ -17,7 +17,7 @@ export default class SelectTime extends React.Component {
             <option value="6">6</option>
             <option value="7">7</option>
             <option value="8">8</option>
-            <option value="9">9</option>
+            <option selected value="9">9</option>
             <option value="10">10</option>
             <option value="11">11</option>
             <option value="12">12</option>

@@ -65,7 +65,7 @@ https://user-images.githubusercontent.com/91447324/174663357-6abef04b-bb52-4c2f-
 1. Clone the repository.
 
     ```shell
-    git clone https://github.com/gabrielenciso/marker-Recs.git
+    git clone https://github.com/gabrielenciso/final-project.git
     ```
 
 2. Install all dependencies with NPM.

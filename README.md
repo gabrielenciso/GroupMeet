@@ -74,7 +74,18 @@ https://user-images.githubusercontent.com/91447324/174663357-6abef04b-bb52-4c2f-
     npm install
     ```
     
-3. Start the project. Once started you can view the application by opening http://localhost:3000 in your browser.
+    
+3. Copy .env.example 
+
+    ```shell
+    cp .env.example .env
+    ```
+    
+    change changeMe of database to database name
+
+  
+    
+4. Start the project. Once started you can view the application by opening http://localhost:3000 in your browser.
 
     ```shell
     npm run dev

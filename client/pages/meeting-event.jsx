@@ -20,7 +20,15 @@ function MeetingTitle(props) {
 }
 
 function RegistrationForm(props) {
-  const { handleRegistration, handleUserName, label } = props;
+  const { handleRegistration, handleUserName, handleSignInOrRegister, label } = props;
+
+  // pass label as state for sign in or registering
+  // pass in event handler for a tag click
+  // make useState() for label, ptag, and a tag
+  // make event listener for a tag
+  // if clicked on a tag --> state changes for meeting event
+  // state gets passed into this component
+  //
   return (
     <div className='mt-10 text-center w-3/4 m-auto
                     lg:w-96 lg:order-2'>
@@ -41,7 +49,8 @@ function RegistrationForm(props) {
         <p className='font-nunito-sans font-light text-xs mt-5'>
           Returning?
         </p>
-        <a className='font-nunito-sans font-normal text-blue-500 hover:cursor-pointer'>
+        <a onClick={handleSignInOrRegister}
+        className='font-nunito-sans font-normal text-blue-500 hover:cursor-pointer'>
           Sign in
         </a>
       </form>
@@ -64,13 +73,15 @@ export default class MeetingEvent extends React.Component {
       isAuthorizing: true,
       selectedBlocks: {
         blocks: []
-      }
+      },
+      registering: true
     };
 
     this.handleRegistration = this.handleRegistration.bind(this);
     this.handleUserName = this.handleUserName.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleSignInOrRegister = this.handleSignInOrRegister.bind(this);
   }
 
   componentDidMount() {
@@ -137,6 +148,11 @@ export default class MeetingEvent extends React.Component {
     this.setState({ username: event.target.value });
   }
 
+  handleSignInOrRegister() {
+    this.setState({ registering: !this.state.registering });
+    console.log('hello');
+  }
+
   handleSignIn(result) {
     const { user, token } = result;
     window.localStorage.setItem('react-context-jwt', token);
@@ -153,7 +169,7 @@ export default class MeetingEvent extends React.Component {
     if (this.state.isAuthorizing) return null;
 
     const { name, description, dates, startTime, endTime, user, selectedBlocks } = this.state;
-    const { handleRegistration, handleUserName, handleSignOut } = this;
+    const { handleRegistration, handleUserName, handleSignOut, handleSignInOrRegister } = this;
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
@@ -162,7 +178,7 @@ export default class MeetingEvent extends React.Component {
 
     const userView = user
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />
-      : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} label="Register as a participant" />;
+      : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignInOrRegister={handleSignInOrRegister} label="Register as a participant" />;
     return (
       <>
         <Header />

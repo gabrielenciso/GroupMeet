@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
@@ -21,12 +21,6 @@ function MeetingTitle(props) {
 
 function RegistrationForm(props) {
   const { handleRegistration, handleUserName, handleSignInOrRegister, registering } = props;
-  const [text, setText] = useState({
-    label: 'Register as new member',
-    button: 'Register',
-    pTag: 'Returning?',
-    aTag: 'Sign in'
-  });
 
   // pass label as state for sign in or registering
   // pass in event handler for a tag click
@@ -36,14 +30,23 @@ function RegistrationForm(props) {
   // state gets passed into this component
   //
 
-  if (!registering) {
-    setText({
-      label: 'Sign in as returning member',
-      button: 'Sign In',
-      pTag: 'new?',
-      aTag: 'register'
-    })
+  let text = {
+    label: 'Register as new member',
+    button: 'Register',
+    pTag: 'Returning?',
+    aTag: 'Sign in'
   }
+
+  if (!registering) {
+    text = {
+      label: 'Sign in as returning member',
+      button: 'Sign in',
+      pTag: 'new?',
+      aTag: 'Register'
+    }
+  }
+
+  console.log(text.label);
 
   const { label, button, pTag, aTag } = text;
   return (

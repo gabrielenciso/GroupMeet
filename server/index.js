@@ -46,9 +46,9 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
   const { meetingId } = req.params;
 
   const sql = `
-  SELECT "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
-  FROM "meetings"
-  WHERE "meetingId" = $1
+  select "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
+  from "meetings"
+  where "meetingId" = $1
   `;
 
   const params = [meetingId];
@@ -178,10 +178,40 @@ app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
       }
 
       const [selectedTimes] = result.rows;
+
       res.status(200).json(selectedTimes);
     })
     .catch(err => next(err));
 });
+
+app.get('api/users/:username/meetingId/:meetingId', (req, res, next) => {
+  const { username, meetingId } = req.params;
+  console.log(username);
+  console.log(meetingId);
+
+  const sql = `
+  select *
+  from "users"
+  where "userName" = $1
+  and "meetingId" = $2
+  `;
+
+  const params = [username, meetingId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result) {
+        throw new ClientError(401, 'user not found');
+      }
+
+      let [user] = result.rows;
+      const { userId, userName } = user;
+      const payload = { userId, userName };
+      const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+
+      res.status(200).json({ user, token });
+    })
+    .catch(err => next(err));
+})
 
 app.use(errorMiddleware);
 

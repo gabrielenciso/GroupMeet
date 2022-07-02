@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import jwtDecode from 'jwt-decode';
 import Header from '../components/header.jsx';
 import Button from '../components/button.jsx';
@@ -20,15 +20,7 @@ function MeetingTitle(props) {
 }
 
 function RegistrationForm(props) {
-  const { handleRegistration, handleUserName, handleSignInOrRegister, registering } = props;
-
-  // pass label as state for sign in or registering
-  // pass in event handler for a tag click
-  // make useState() for label, ptag, and a tag
-  // make event listener for a tag
-  // if clicked on a tag --> state changes for meeting event
-  // state gets passed into this component
-  //
+  const { handleRegistration, handleUserName, handleSignIn, handleSignInOrRegister, registering } = props;
 
   let text = {
     label: 'Register as new member',
@@ -46,13 +38,12 @@ function RegistrationForm(props) {
     }
   }
 
-  console.log(text.label);
-
   const { label, button, pTag, aTag } = text;
+  const onSubmit = registering ? handleRegistration : handleSignIn;
   return (
     <div className='mt-10 text-center w-3/4 m-auto
                     lg:w-96 lg:order-2'>
-      <form onSubmit={handleRegistration}>
+      <form onSubmit={onSubmit}>
         <label htmlFor='username' className='font-nunito-sans font-light text-lg'>
           {label}
         </label>
@@ -99,6 +90,7 @@ export default class MeetingEvent extends React.Component {
 
     this.handleRegistration = this.handleRegistration.bind(this);
     this.handleUserName = this.handleUserName.bind(this);
+    this.handleValidUser = this.handleValidUser.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
     this.handleSignInOrRegister = this.handleSignInOrRegister.bind(this);
@@ -158,8 +150,7 @@ export default class MeetingEvent extends React.Component {
         if (result.error) {
           alert('username is already taken');
         } else {
-          this.handleSignIn(result);
-          this.setState({ signIn: true });
+          this.handleValidUser(result);
         }
       });
   }
@@ -170,13 +161,40 @@ export default class MeetingEvent extends React.Component {
 
   handleSignInOrRegister() {
     this.setState({ registering: !this.state.registering });
-    console.log('hello');
   }
 
-  handleSignIn(result) {
+  handleValidUser(result) {
     const { user, token } = result;
     window.localStorage.setItem('react-context-jwt', token);
     this.setState({ user });
+  }
+
+  handleSignIn(event) {
+    event.preventDefault();
+
+    const { username } = this.state;
+    const { route } = this.props;
+    const meetingId = route.params.get('meetingId');
+    console.log(username);
+    fetch(`/api/users/${username}/meetingId/${meetingId}`)
+      .then(res => res.json())
+      .then(result => {
+
+        if (!result) {
+
+          alert('invalid user');
+        } else {
+          console.log(result);
+          const { selectedTimes } = result.user;
+          this.setState({
+            blocks: selectedTimes
+          });
+          this.handleValidUser(result);
+        }
+
+
+      })
+      .catch(err => console.error(err));
   }
 
   handleSignOut(event) {
@@ -189,7 +207,7 @@ export default class MeetingEvent extends React.Component {
     if (this.state.isAuthorizing) return null;
 
     const { name, description, dates, startTime, endTime, user, selectedBlocks, registering } = this.state;
-    const { handleRegistration, handleUserName, handleSignOut, handleSignInOrRegister } = this;
+    const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister } = this;
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
@@ -199,7 +217,7 @@ export default class MeetingEvent extends React.Component {
 
     const userView = user
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />
-      : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignInOrRegister={handleSignInOrRegister} registering={registering} />;
+      : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignIn={handleSignIn} handleSignInOrRegister={handleSignInOrRegister} registering={registering} />;
     return (
       <>
         <Header />

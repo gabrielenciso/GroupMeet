@@ -184,10 +184,8 @@ app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('api/users/:username/meetingId/:meetingId', (req, res, next) => {
-  const { username, meetingId } = req.params;
-  console.log(username);
-  console.log(meetingId);
+app.post('/api/sign-in', (req, res, next) => {
+  const { username, meetingId } = req.body;
 
   const sql = `
   select *
@@ -199,11 +197,12 @@ app.get('api/users/:username/meetingId/:meetingId', (req, res, next) => {
   const params = [username, meetingId];
   db.query(sql, params)
     .then(result => {
-      if (!result) {
+      const [user] = result.rows;
+
+      if (!user) {
         throw new ClientError(401, 'user not found');
       }
 
-      let [user] = result.rows;
       const { userId, userName } = user;
       const payload = { userId, userName };
       const token = jwt.sign(payload, process.env.TOKEN_SECRET);
@@ -211,7 +210,7 @@ app.get('api/users/:username/meetingId/:meetingId', (req, res, next) => {
       res.status(200).json({ user, token });
     })
     .catch(err => next(err));
-})
+});
 
 app.use(errorMiddleware);
 

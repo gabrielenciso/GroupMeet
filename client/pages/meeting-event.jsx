@@ -27,7 +27,7 @@ function RegistrationForm(props) {
     button: 'Register',
     pTag: 'Returning?',
     aTag: 'Sign in'
-  }
+  };
 
   if (!registering) {
     text = {
@@ -35,7 +35,7 @@ function RegistrationForm(props) {
       button: 'Sign in',
       pTag: 'new?',
       aTag: 'Register'
-    }
+    };
   }
 
   const { label, button, pTag, aTag } = text;
@@ -175,23 +175,28 @@ export default class MeetingEvent extends React.Component {
     const { username } = this.state;
     const { route } = this.props;
     const meetingId = route.params.get('meetingId');
-    console.log(username);
-    fetch(`/api/users/${username}/meetingId/${meetingId}`)
+    const body = { username, meetingId };
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    };
+
+    fetch('/api/sign-in', req)
       .then(res => res.json())
       .then(result => {
+        if (result.error) {
 
-        if (!result) {
-
-          alert('invalid user');
+          alert(result.error);
         } else {
-          console.log(result);
           const { selectedTimes } = result.user;
           this.setState({
             blocks: selectedTimes
           });
           this.handleValidUser(result);
         }
-
 
       })
       .catch(err => console.error(err));
@@ -211,9 +216,8 @@ export default class MeetingEvent extends React.Component {
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
-      className='font-nunito-sans font-light text-blue-500 w-full lg:pl-5 lg:order-3' />
+      className='font-nunito-sans font-light text-blue-500 w-full lg:pl-5 lg:order-3 hover:cursor-pointer' />
       : null;
-
 
     const userView = user
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />

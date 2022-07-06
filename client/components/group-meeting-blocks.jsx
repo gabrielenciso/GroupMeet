@@ -30,7 +30,7 @@ export default class GroupMeetingBlocks extends React.Component {
       .then(res => res.json())
       .then(result => {
 
-        const blocks = result.selectedBlocks.blocks;
+        const blocks = result.meeting.selectedBlocks.blocks;
         this.setState({
           groupBlocks: {
             selected: blocks
@@ -62,7 +62,7 @@ export default class GroupMeetingBlocks extends React.Component {
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { dates, startTime, endTime } = this.props;
+    const { dates, startTime, endTime, handleHover } = this.props;
     if (dates.length === 0) return;
 
     const days = JSON.parse(dates).days;
@@ -95,7 +95,7 @@ export default class GroupMeetingBlocks extends React.Component {
 
         const users = selected[i][j].join(',');
         const block = (
-          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users} onMouseOver={console.log('hello')}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users} onMouseOver={handleHover}
             className={`h-3 w-14 mr-0.5 ${color}`} style={{ opacity: opacityVal }}></div>
         );
         row.push(block);

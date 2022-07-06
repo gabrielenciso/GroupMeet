@@ -55,8 +55,20 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const [meeting] = result.rows;
-      res.status(201).json(meeting);
 
+      const sql2 = `
+      select array_agg(array["userName", "userId"::text])
+      from "users"
+      join "meetings" using ("meetingId")
+      where "meetings"."meetingId" = $1
+      `;
+      db.query(sql2, params)
+        .then(result => {
+          const [users] = result.rows;
+
+          res.status(201).json({ meeting, users });
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });

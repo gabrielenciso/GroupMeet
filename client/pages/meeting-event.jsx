@@ -81,6 +81,7 @@ export default class MeetingEvent extends React.Component {
       endTime: '',
       username: '',
       user: null,
+      users: [],
       isAuthorizing: true,
       selectedBlocks: {
         blocks: []
@@ -94,6 +95,7 @@ export default class MeetingEvent extends React.Component {
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
     this.handleSignInOrRegister = this.handleSignInOrRegister.bind(this);
+    this.handleHover = this.handleHover.bind(this);
   }
 
   componentDidMount() {
@@ -102,15 +104,16 @@ export default class MeetingEvent extends React.Component {
 
     fetch(`api/meetings/${meetingId}`)
       .then(res => res.json())
-      .then(meeting => {
-        const { name, description, dates, startTime, endTime, selectedBlocks } = meeting;
+      .then(res => {
+        const { name, description, dates, startTime, endTime, selectedBlocks } = res.meeting;
         this.setState({
           name,
           description,
           dates,
           startTime,
           endTime,
-          selectedBlocks
+          selectedBlocks,
+          users: [...res.users.array_agg]
         });
       })
       .catch(err => console.error(err));
@@ -208,11 +211,17 @@ export default class MeetingEvent extends React.Component {
     this.setState({ user: null });
   }
 
+  handleHover(event) {
+    // const users = event.target.getAttribute('users').split(',');
+
+    // // console.log(users);
+  }
+
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering } = this.state;
-    const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister } = this;
+    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering, users } = this.state;
+    const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister, handleHover } = this;
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
@@ -237,9 +246,9 @@ export default class MeetingEvent extends React.Component {
               Group&apos;s Availability
             </h1>
             <h3 className='font-nunito-sans mt-4 mb-10 w-full'>
-              0 registered
+              {users.length} registered
             </h3>
-            <GroupMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} groupBlocks={selectedBlocks} route={this.props.route} user={user}/>
+            <GroupMeetingBlocks handleHover={handleHover} dates={dates} startTime={startTime} endTime={endTime} groupBlocks={selectedBlocks} route={this.props.route} user={user}/>
           </div>
         </div>
       </>

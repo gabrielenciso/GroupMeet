@@ -95,7 +95,7 @@ export default class GroupMeetingBlocks extends React.Component {
 
         const users = selected[i][j].join(',');
         const block = (
-          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users} onMouseOver={console.log('hello')}
             className={`h-3 w-14 mr-0.5 ${color}`} style={{ opacity: opacityVal }}></div>
         );
         row.push(block);

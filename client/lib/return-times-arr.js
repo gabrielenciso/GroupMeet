@@ -24,9 +24,12 @@ function returnTimesArr(startTime, endTime) {
     if (startMin === 60) {
       startMin = 0;
       startHour++;
+      if (startHour === 12) {
+        startAMPM = 'PM';
+      }
       if (startHour > 12) {
         startHour = 1;
-        startAMPM = 'PM';
+        // startAMPM = 'PM';
       }
     }
 

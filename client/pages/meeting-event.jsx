@@ -82,6 +82,8 @@ export default class MeetingEvent extends React.Component {
       username: '',
       user: null,
       users: [],
+      hover: false,
+      dateAndTime: '',
       isAuthorizing: true,
       selectedBlocks: {
         blocks: []
@@ -95,7 +97,9 @@ export default class MeetingEvent extends React.Component {
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
     this.handleSignInOrRegister = this.handleSignInOrRegister.bind(this);
-    this.handleHover = this.handleHover.bind(this);
+    this.handleHoverTimes = this.handleHoverTimes.bind(this);
+    this.handleHoverIn = this.handleHoverIn.bind(this);
+    this.handleHoverOut = this.handleHoverOut.bind(this);
   }
 
   componentDidMount() {
@@ -211,17 +215,49 @@ export default class MeetingEvent extends React.Component {
     this.setState({ user: null });
   }
 
-  handleHover(event) {
-    // const users = event.target.getAttribute('users').split(',');
+  handleHoverTimes(event) {
+    if (!event) return;
 
-    // // console.log(users);
+    const users = event.target.getAttribute('users').split(',');
+    const date = event.target.getAttribute('date');
+    const time = event.target.getAttribute('time');
+
+    this.dateAndTime(date, time);
+    console.log(event.target);
+    // console.log(users);
+  }
+
+  dateAndTime(date, time) {
+    if (date === undefined || time === undefined) return;
+
+    const dateArr = date.split(' ');
+
+    let weekDay = '';
+    if (dateArr[0] === 'Mon') weekDay = 'Monday';
+    if (dateArr[0] === 'Tue') weekDay = 'Tuesday';
+    if (dateArr[0] === 'Wed') weekDay = 'Wednesday';
+    if (dateArr[0] === 'Thu') weekDay = 'Thursday';
+    if (dateArr[0] === 'Fri') weekDay = 'Friday';
+    if (dateArr[0] === 'Sat') weekDay = 'Saturday';
+    if (dateArr[0] === 'Sun') weekDay = 'Sunday';
+
+    const dateAndTime = weekDay + ' ' + dateArr.slice(1, 4).join(' ') + ' ' + time;
+    this.setState({ dateAndTime })
+  }
+
+  handleHoverIn() {
+    this.setState({ hover: true });
+  }
+
+  handleHoverOut() {
+    this.setState({ hover: false });
   }
 
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering, users } = this.state;
-    const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister, handleHover } = this;
+    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering, users, hover, dateAndTime } = this.state;
+    const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister, handleHoverTimes, handleHoverIn, handleHoverOut } = this;
 
     const signOut = user
       ? <input type='submit' name='signout' value='Sign Out' onClick={handleSignOut}
@@ -231,6 +267,36 @@ export default class MeetingEvent extends React.Component {
     const userView = user
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />
       : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignIn={handleSignIn} handleSignInOrRegister={handleSignInOrRegister} registering={registering} />;
+
+    const hoverView = hover
+      ? <>
+          <h1 className='font-nunito-sans text-xl font-thin mt-10 w-full'>
+            Group&apos;s Availability
+          </h1>
+          <div className='mt-4 mb-5 w-full'>
+            <h4 className='font-nunito-sans text-sm font-thin'>
+              {dateAndTime}
+            </h4>
+            <div className='w-full flex flex-wrap justify-center pt-2'>
+
+              {users.map(user =>
+              <div key={user[1]} className='font-nunito-sans text-sm mx-0.5 w-16 h-6 rounded-xl center-all bg-gray-300 text-gray-500'>
+                {user[0]}
+              </div>
+              )}
+            </div>
+
+          </div>
+        </>
+      : <>
+          <h1 className='font-nunito-sans text-xl font-thin mt-10 w-full'>
+            Group&apos;s Availability
+          </h1>
+          <h3 className='font-nunito-sans mt-4 mb-10 w-full'>
+            {users.length} Registered
+          </h3>
+        </>
+
     return (
       <>
         <Header />
@@ -242,13 +308,8 @@ export default class MeetingEvent extends React.Component {
             {signOut}
           </div>
           <div className='w-full lg:w-1/2 text-center flex flex-wrap justify-center'>
-            <h1 className='font-nunito-sans text-xl font-thin mt-10 w-full'>
-              Group&apos;s Availability
-            </h1>
-            <h3 className='font-nunito-sans mt-4 mb-10 w-full'>
-              {users.length} registered
-            </h3>
-            <GroupMeetingBlocks handleHover={handleHover} dates={dates} startTime={startTime} endTime={endTime} groupBlocks={selectedBlocks} route={this.props.route} user={user}/>
+            {hoverView}
+            <GroupMeetingBlocks handleHoverTimes={handleHoverTimes} handleHoverIn={handleHoverIn} handleHoverOut={handleHoverOut} dates={dates} startTime={startTime} endTime={endTime} groupBlocks={selectedBlocks} route={this.props.route} user={user}/>
           </div>
         </div>
       </>

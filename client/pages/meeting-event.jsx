@@ -82,6 +82,7 @@ export default class MeetingEvent extends React.Component {
       username: '',
       user: null,
       users: [],
+      available: [],
       hover: false,
       dateAndTime: '',
       isAuthorizing: true,
@@ -126,6 +127,18 @@ export default class MeetingEvent extends React.Component {
     const user = token ? jwtDecode(token) : null;
     this.setState({ user, isAuthorizing: false });
   }
+
+  // componentDidUpdate() {
+  //   const route = this.props.route;
+  //   const meetingId = route.params.get('meetingId');
+
+  //   fetch(`api/meetings/${meetingId}`)
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       this.setState({ users: [...res.users.array_agg] });
+  //     })
+  //     .catch(err => console.error(err));
+  // }
 
   componentWillUnmount() {
     window.localStorage.removeItem('react-context-jwt');
@@ -219,12 +232,12 @@ export default class MeetingEvent extends React.Component {
     if (!event) return;
 
     const users = event.target.getAttribute('users').split(',');
+    this.setState({ available: [...users] });
+
     const date = event.target.getAttribute('date');
     const time = event.target.getAttribute('time');
 
     this.dateAndTime(date, time);
-    console.log(event.target);
-    // console.log(users);
   }
 
   dateAndTime(date, time) {
@@ -242,7 +255,7 @@ export default class MeetingEvent extends React.Component {
     if (dateArr[0] === 'Sun') weekDay = 'Sunday';
 
     const dateAndTime = weekDay + ' ' + dateArr.slice(1, 4).join(' ') + ' ' + time;
-    this.setState({ dateAndTime })
+    this.setState({ dateAndTime });
   }
 
   handleHoverIn() {
@@ -256,7 +269,7 @@ export default class MeetingEvent extends React.Component {
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering, users, hover, dateAndTime } = this.state;
+    const { name, description, dates, startTime, endTime, user, selectedBlocks, registering, users, hover, dateAndTime, available } = this.state;
     const { handleRegistration, handleUserName, handleSignIn, handleSignOut, handleSignInOrRegister, handleHoverTimes, handleHoverIn, handleHoverOut } = this;
 
     const signOut = user
@@ -267,6 +280,15 @@ export default class MeetingEvent extends React.Component {
     const userView = user
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />
       : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignIn={handleSignIn} handleSignInOrRegister={handleSignInOrRegister} registering={registering} />;
+
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
+      if (!available.includes(user[1])) {
+        const temp = user;
+        users.splice(i, 1);
+        users.push(temp);
+      }
+    }
 
     const hoverView = hover
       ? <>
@@ -279,11 +301,14 @@ export default class MeetingEvent extends React.Component {
             </h4>
             <div className='w-full flex flex-wrap justify-center pt-2'>
 
-              {users.map(user =>
-              <div key={user[1]} className='font-nunito-sans text-sm mx-0.5 w-16 h-6 rounded-xl center-all bg-gray-300 text-gray-500'>
-                {user[0]}
-              </div>
-              )}
+              {users.map(user => {
+                const color = available.includes(user[1]) ? 'bg-green-400' : 'bg-gray-300';
+                return (
+                  <div key={user[1]} className={`font-nunito-sans text-sm mx-0.5 mb-1 w-16 h-6 rounded-xl center-all ${color} text-gray-500`}>
+                    {user[0]}
+                  </div>
+                );
+              })}
             </div>
 
           </div>
@@ -295,7 +320,7 @@ export default class MeetingEvent extends React.Component {
           <h3 className='font-nunito-sans mt-4 mb-10 w-full'>
             {users.length} Registered
           </h3>
-        </>
+        </>;
 
     return (
       <>

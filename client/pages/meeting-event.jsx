@@ -117,9 +117,12 @@ export default class MeetingEvent extends React.Component {
           dates,
           startTime,
           endTime,
-          selectedBlocks,
-          users: [...res.users.array_agg]
+          selectedBlocks
         });
+
+        if (res.users.array_agg) {
+          this.setState({ users: [...res.users.array_agg] });
+        }
       })
       .catch(err => console.error(err));
 
@@ -277,7 +280,7 @@ export default class MeetingEvent extends React.Component {
             <h4 className='font-nunito-sans text-sm font-thin'>
               {dateAndTime}
             </h4>
-            <div className='w-full flex flex-wrap justify-center pt-2'>
+            <div className='w-full flex flex-wrap justify-center pt-2 min-h-[64px]'>
 
               {users.map(user => {
                 const color = available.includes(user[1]) ? 'bg-green-400' : 'bg-gray-300';

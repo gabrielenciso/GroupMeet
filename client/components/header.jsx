@@ -17,11 +17,12 @@ export default class Header extends React.Component {
     return (
       <>
         <header>
-          <h1 onClick={handleBackToForm}
-          className='text-blue-500 text-3xl p-3 font-nunito-sans font-light w-96 m-auto select-none hover:cursor-pointer
-        lg:w-4/5 lg:m-auto'>
-            GroupMeet
-          </h1>
+          <div className='p-3 w-96 m-auto select-none lg:w-4/5'>
+            <h1 onClick={handleBackToForm}
+              className='text-blue-500 text-3xl font-nunito-sans font-light hover:cursor-pointer w-fit'>
+              GroupMeet
+            </h1>
+          </div>
           <hr className='border-gray-300' />
         </header>
       </>

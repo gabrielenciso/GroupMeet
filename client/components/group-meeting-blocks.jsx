@@ -30,7 +30,7 @@ export default class GroupMeetingBlocks extends React.Component {
       .then(res => res.json())
       .then(result => {
 
-        const blocks = result.selectedBlocks.blocks;
+        const blocks = result.meeting.selectedBlocks.blocks;
         this.setState({
           groupBlocks: {
             selected: blocks
@@ -62,7 +62,7 @@ export default class GroupMeetingBlocks extends React.Component {
   render() {
     if (this.state.isAuthorizing) return null;
 
-    const { dates, startTime, endTime } = this.props;
+    const { dates, startTime, endTime, handleHoverTimes, handleHoverIn, handleHoverOut } = this.props;
     if (dates.length === 0) return;
 
     const days = JSON.parse(dates).days;
@@ -95,7 +95,7 @@ export default class GroupMeetingBlocks extends React.Component {
 
         const users = selected[i][j].join(',');
         const block = (
-          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users}
+          <div key={j} time={times[i]} date={days[j]} col={j} row={i} users={users} onMouseOver={handleHoverTimes}
             className={`h-3 w-14 mr-0.5 ${color}`} style={{ opacity: opacityVal }}></div>
         );
         row.push(block);
@@ -149,7 +149,8 @@ export default class GroupMeetingBlocks extends React.Component {
           <div className='flex flex-col w-10 justify-between mt-20 mb-10 mx-1'>
             {timeLabels}
           </div>
-          <div className='my-10 mr-10 w-min flex flex-wrap justify-center'>
+          <div onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}
+          className='my-10 mr-10 w-min flex flex-wrap justify-center'>
             <div className='w-full flex justify-around'>
               {dateLabels}
             </div>

@@ -46,17 +46,29 @@ app.get('/api/meetings/:meetingId', (req, res, next) => {
   const { meetingId } = req.params;
 
   const sql = `
-  SELECT "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
-  FROM "meetings"
-  WHERE "meetingId" = $1
+  select "name", "description", "dates", "startTime", "endTime", "selectedBlocks"
+  from "meetings"
+  where "meetingId" = $1
   `;
 
   const params = [meetingId];
   db.query(sql, params)
     .then(result => {
       const [meeting] = result.rows;
-      res.status(201).json(meeting);
 
+      const sql2 = `
+      select array_agg(array["userName", "userId"::text])
+      from "users"
+      join "meetings" using ("meetingId")
+      where "meetings"."meetingId" = $1
+      `;
+      db.query(sql2, params)
+        .then(result => {
+          const [users] = result.rows;
+
+          res.status(201).json({ meeting, users });
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
@@ -178,7 +190,36 @@ app.get('/api/users/:userId/meetingId/:meetingId', (req, res, next) => {
       }
 
       const [selectedTimes] = result.rows;
+
       res.status(200).json(selectedTimes);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/sign-in', (req, res, next) => {
+  const { username, meetingId } = req.body;
+
+  const sql = `
+  select *
+  from "users"
+  where "userName" = $1
+  and "meetingId" = $2
+  `;
+
+  const params = [username, meetingId];
+  db.query(sql, params)
+    .then(result => {
+      const [user] = result.rows;
+
+      if (!user) {
+        throw new ClientError(401, 'user not found');
+      }
+
+      const { userId, userName } = user;
+      const payload = { userId, userName };
+      const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+
+      res.status(200).json({ user, token });
     })
     .catch(err => next(err));
 });

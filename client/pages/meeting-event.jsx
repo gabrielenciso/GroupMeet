@@ -171,6 +171,8 @@ export default class MeetingEvent extends React.Component {
           alert('username is already taken');
         } else {
           this.handleValidUser(result);
+          const { userName, userId } = result.user;
+          this.setState({ users: [...this.state.users, [userName, String(userId)]] });
         }
       });
   }
@@ -281,29 +283,15 @@ export default class MeetingEvent extends React.Component {
       ? <UserMeetingBlocks dates={dates} startTime={startTime} endTime={endTime} route={this.props.route} user={user} groupBlocks={selectedBlocks} />
       : <RegistrationForm handleUserName={handleUserName} handleRegistration={handleRegistration} handleSignIn={handleSignIn} handleSignInOrRegister={handleSignInOrRegister} registering={registering} />;
 
-    const usersArr = users.slice();
-    for (let i = 0; i < usersArr.length; i++) {
-      const currUser = usersArr[i];
-      if (!available.includes(currUser[1])) {
-        const temp = currUser;
-        usersArr.splice(i, 1);
-        usersArr.push(temp);
-      }
-    }
-
-    // hover
     const hoverView = hover
       ? <>
-          {/* <h1 className='font-nunito-sans text-xl font-thin mt-5 w-full'>
-            Group&apos;s Availability
-          </h1> */}
           <div className='mt-11 mb-5 w-full'>
             <h4 className='font-nunito-sans text-sm font-thin'>
               {dateAndTime}
             </h4>
             <div className='w-full flex flex-wrap justify-center pt-2'>
 
-              {usersArr.map(user => {
+              {users.map(user => {
                 const color = available.includes(user[1]) ? 'bg-green-400' : 'bg-gray-300';
                 return (
                   <div key={user[1]} className={`font-nunito-sans text-sm mx-0.5 mb-1 w-16 h-6 rounded-xl center-all ${color} text-gray-500`}>

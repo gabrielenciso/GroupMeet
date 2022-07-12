@@ -29,7 +29,6 @@ function returnTimesArr(startTime, endTime) {
       }
       if (startHour > 12) {
         startHour = 1;
-        // startAMPM = 'PM';
       }
     }
 

@@ -128,18 +128,6 @@ export default class MeetingEvent extends React.Component {
     this.setState({ user, isAuthorizing: false });
   }
 
-  // componentDidUpdate() {
-  //   const route = this.props.route;
-  //   const meetingId = route.params.get('meetingId');
-
-  //   fetch(`api/meetings/${meetingId}`)
-  //     .then(res => res.json())
-  //     .then(res => {
-  //       this.setState({ users: [...res.users.array_agg] });
-  //     })
-  //     .catch(err => console.error(err));
-  // }
-
   componentWillUnmount() {
     window.localStorage.removeItem('react-context-jwt');
     this.setState({ user: null });
